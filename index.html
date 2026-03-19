@@ -79,7 +79,7 @@
   .loading-bar::after { content:''; position:absolute; left:-40%; top:0; height:100%; width:40%; background:var(--gold); animation:slide 1.2s ease-in-out infinite; }
   @keyframes slide { 0%{left:-40%} 100%{left:100%} }
   @keyframes fadeIn { from{opacity:0;transform:scale(0.98)} to{opacity:1;transform:scale(1)} }
-  .result-actions { display:none; gap:0.75rem; margin-top:0.75rem; }
+  .result-actions { display:flex; gap:0.75rem; margin-top:0.75rem; }
   .btn-action { flex:1; padding:0.55rem; border:1px solid var(--mist); background:transparent; font-family:'Courier Prime',monospace; font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--charcoal); cursor:pointer; transition:all 0.2s; border-radius:2px; }
   .btn-action:hover { border-color:var(--gold); color:var(--gold); }
   .error-msg { background:rgba(139,58,42,0.08); border:1px solid var(--rust); border-radius:2px; padding:0.75rem 1rem; font-style:italic; font-size:0.88rem; color:var(--rust); margin-top:0.75rem; display:none; }
