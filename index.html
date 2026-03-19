@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRETTYBRID — Art Style Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --ink:#0d0d0b; --paper:#f5f0e8; --cream:#ede8db; --gold:#b8934a; --rust:#8b3a2a; --sage:#5a6b52; --charcoal:#2a2a26; --mist:#c8c2b4; }
+  body { background:var(--paper); color:var(--ink); font-family:'Cormorant Garamond',Georgia,serif; min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:1000; opacity:0.6; }
+  header { padding:2rem 3rem 1.25rem; display:flex; align-items:baseline; gap:2rem; border-bottom:1px solid var(--mist); position:relative; }
+  header::after { content:''; position:absolute; bottom:-3px; left:3rem; right:3rem; height:1px; background:var(--gold); opacity:0.4; }
+  .wordmark { font-family:'Courier Prime',monospace; font-size:0.7rem; font-weight:700; letter-spacing:0.35em; color:var(--gold); text-transform:uppercase; }
+  h1 { font-size:clamp(2rem,4vw,3rem); font-weight:300; font-style:italic; line-height:1; color:var(--charcoal); }
+  h1 em { font-style:normal; color:var(--gold); }
+  .subtitle { font-family:'Courier Prime',monospace; font-size:0.6rem; letter-spacing:0.2em; color:var(--mist); text-transform:uppercase; margin-left:auto; align-self:center; }
+  .free-badge { font-family:'Courier Prime',monospace; font-size:0.55rem; letter-spacing:0.15em; text-transform:uppercase; background:var(--sage); color:white; padding:3px 8px; border-radius:2px; align-self:center; }
+  main { display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 90px); }
+  .panel { padding:2.5rem 3rem; position:relative; }
+  .panel-left { border-right:1px solid var(--mist); overflow-y:auto; }
+  .panel-label { font-family:'Courier Prime',monospace; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1.25rem; display:flex; align-items:center; gap:0.75rem; }
+  .panel-label::after { content:''; flex:1; height:1px; background:var(--mist); }
+  .drop-zone { display:flex; border:1.5px dashed var(--mist); border-radius:2px; padding:2rem; text-align:center; cursor:pointer; transition:all 0.3s; position:relative; background:var(--cream); min-height:160px; flex-direction:column; align-items:center; justify-content:center; gap:0.75rem; user-select:none; }
+  .drop-zone:hover,.drop-zone.drag-over { border-color:var(--gold); background:#ede8d4; }
+  .drop-icon { font-size:2rem; opacity:0.25; line-height:1; }
+  .drop-text { font-size:1rem; font-style:italic; color:var(--charcoal); opacity:0.7; }
+  .drop-sub { font-family:'Courier Prime',monospace; font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--mist); }
+  .browse-btn { margin-top:0.25rem; padding:0.45rem 1.25rem; border:1px solid var(--gold); background:transparent; color:var(--gold); font-family:'Courier Prime',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:all 0.2s; }
+  .browse-btn:hover { background:rgba(184,147,74,0.1); }
+  .images-grid { display:flex; flex-direction:column; gap:0.75rem; margin-top:1.25rem; }
+  .thumb-wrap { position:relative; overflow:hidden; border:1px solid var(--mist); cursor:pointer; transition:all 0.2s; background:var(--cream); }
+  .thumb-wrap:hover { border-color:var(--gold); }
+  .thumb-wrap.selected { border-color:var(--gold); outline:2px solid var(--gold); outline-offset:-1px; }
+  .thumb-wrap img { width:100%; height:auto; display:block; max-height:200px; object-fit:contain; }
+  .thumb-meta { padding:4px 8px; background:rgba(13,13,11,0.6); position:absolute; bottom:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; }
+  .thumb-dims { font-family:'Courier Prime',monospace; font-size:8px; color:#fff; letter-spacing:0.05em; }
+  .thumb-sel { font-family:'Courier Prime',monospace; font-size:8px; color:var(--gold); }
+  .thumb-remove { position:absolute; top:4px; right:4px; background:var(--rust); color:white; border:none; width:18px; height:18px; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; border-radius:1px; }
+  .thumb-wrap:hover .thumb-remove { opacity:1; }
+  .analyze-btn { width:100%; margin-top:1rem; padding:0.65rem; border:1px solid var(--gold); background:transparent; font-family:'Courier Prime',monospace; font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); cursor:pointer; transition:all 0.2s; border-radius:2px; }
+  .analyze-btn:hover { background:rgba(184,147,74,0.08); }
+  .analyze-btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .style-description { background:var(--cream); border-left:2px solid var(--gold); padding:0.85rem 1rem; margin-top:0.75rem; font-style:italic; font-size:0.9rem; line-height:1.7; color:var(--charcoal); border-radius:0 2px 2px 0; display:none; }
+  .style-builder { margin-top:1.5rem; }
+  .trait-group { margin-bottom:1.25rem; }
+  .trait-label { font-family:'Courier Prime',monospace; font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--charcoal); margin-bottom:0.5rem; display:block; }
+  .trait-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .trait-tag { font-family:'Courier Prime',monospace; font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase; padding:4px 10px; border:1px solid var(--mist); color:var(--charcoal); background:transparent; cursor:pointer; transition:all 0.2s; border-radius:1px; }
+  .trait-tag:hover { border-color:var(--gold); color:var(--gold); }
+  .trait-tag.active { border-color:var(--gold); color:white; background:var(--gold); }
+  .prompt-group { margin-bottom:1.25rem; }
+  .prompt-label { font-family:'Courier Prime',monospace; font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--charcoal); margin-bottom:0.5rem; display:block; }
+  textarea { width:100%; background:var(--cream); border:1px solid var(--mist); border-radius:2px; padding:0.85rem 1rem; font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--ink); resize:vertical; min-height:80px; transition:border-color 0.2s; outline:none; line-height:1.6; }
+  textarea:focus { border-color:var(--gold); }
+  textarea::placeholder { color:var(--mist); font-style:italic; }
+  .options-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.25rem; }
+  select { width:100%; background:var(--cream); border:1px solid var(--mist); border-radius:2px; padding:0.55rem 0.75rem; font-family:'Courier Prime',monospace; font-size:0.62rem; letter-spacing:0.08em; color:var(--charcoal); cursor:pointer; outline:none; transition:border-color 0.2s; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23b8934a'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 0.75rem center; padding-right:2rem; }
+  select:focus { border-color:var(--gold); }
+  .prompt-preview-box { background:var(--cream); border:1px solid var(--mist); border-left:2px solid var(--gold); border-radius:2px; padding:0.85rem 1rem; font-family:'Courier Prime',monospace; font-size:0.58rem; line-height:1.7; color:var(--charcoal); margin-bottom:1.25rem; max-height:110px; overflow-y:auto; display:none; }
+  .prompt-preview-box.visible { display:block; }
+  .prompt-preview-label { font-family:'Courier Prime',monospace; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; display:block; }
+  .btn-generate { width:100%; padding:1rem; background:var(--ink); color:var(--paper); border:none; font-family:'Courier Prime',monospace; font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; cursor:pointer; position:relative; overflow:hidden; transition:all 0.3s; border-radius:2px; }
+  .btn-generate::before { content:''; position:absolute; inset:0; background:var(--gold); transform:translateX(-100%); transition:transform 0.4s ease; }
+  .btn-generate:hover::before { transform:translateX(0); }
+  .btn-generate span { position:relative; z-index:1; }
+  .btn-generate:disabled { opacity:0.4; cursor:not-allowed; }
+  .btn-generate:disabled::before { display:none; }
+  .no-images-warning { font-family:'Courier Prime',monospace; font-size:0.6rem; letter-spacing:0.12em; color:var(--rust); text-transform:uppercase; margin-bottom:0.75rem; display:none; }
+  .output-section { margin-top:1.75rem; }
+  .output-canvas { background:var(--cream); border:1px solid var(--mist); border-radius:2px; min-height:200px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .output-placeholder { text-align:center; padding:2rem; }
+  .output-placeholder .big-char { font-size:3.5rem; opacity:0.1; line-height:1; display:block; margin-bottom:0.75rem; }
+  .output-placeholder p { font-style:italic; font-size:0.95rem; color:var(--mist); }
+  .loading-overlay { position:absolute; inset:0; background:var(--cream); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.25rem; }
+  .loading-text { font-style:italic; font-size:1rem; color:var(--charcoal); opacity:0.7; text-align:center; padding:0 1rem; }
+  .loading-bar { width:120px; height:1px; background:var(--mist); position:relative; overflow:hidden; }
+  .loading-bar::after { content:''; position:absolute; left:-40%; top:0; height:100%; width:40%; background:var(--gold); animation:slide 1.2s ease-in-out infinite; }
+  @keyframes slide { 0%{left:-40%} 100%{left:100%} }
+  @keyframes fadeIn { from{opacity:0;transform:scale(0.98)} to{opacity:1;transform:scale(1)} }
+  .result-actions { display:none; gap:0.75rem; margin-top:0.75rem; }
+  .btn-action { flex:1; padding:0.55rem; border:1px solid var(--mist); background:transparent; font-family:'Courier Prime',monospace; font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--charcoal); cursor:pointer; transition:all 0.2s; border-radius:2px; }
+  .btn-action:hover { border-color:var(--gold); color:var(--gold); }
+  .error-msg { background:rgba(139,58,42,0.08); border:1px solid var(--rust); border-radius:2px; padding:0.75rem 1rem; font-style:italic; font-size:0.88rem; color:var(--rust); margin-top:0.75rem; display:none; }
+  .error-msg.visible { display:block; }
+  .history-strip { padding:1.25rem 3rem; border-top:1px solid var(--mist); display:none; }
+  .history-strip.visible { display:block; }
+  .history-grid { display:flex; gap:0.75rem; overflow-x:auto; padding-bottom:0.5rem; }
+  .history-thumb { flex-shrink:0; width:80px; height:80px; border:1px solid var(--mist); overflow:hidden; cursor:pointer; transition:border-color 0.2s; border-radius:2px; }
+  .history-thumb:hover { border-color:var(--gold); }
+  .history-thumb img { width:100%; height:100%; object-fit:cover; }
+  .toast { position:fixed; bottom:2rem; right:2rem; background:var(--charcoal); color:var(--paper); font-family:'Courier Prime',monospace; font-size:0.62rem; letter-spacing:0.15em; padding:0.65rem 1.25rem; border-radius:2px; transform:translateY(100px); opacity:0; transition:all 0.3s; z-index:999; border-left:3px solid var(--gold); }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .inscribe-panel { margin-top:1.5rem; border:1px solid var(--gold); border-radius:2px; overflow:hidden; display:none; animation:fadeIn 0.4s ease; }
+  .inscribe-panel.visible { display:block; }
+  .inscribe-header { background:var(--ink); color:var(--paper); padding:0.85rem 1.25rem; display:flex; align-items:center; gap:0.75rem; }
+  .inscribe-header-icon { font-size:1rem; }
+  .inscribe-header-title { font-family:'Courier Prime',monospace; font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; }
+  .inscribe-header-sub { font-family:'Courier Prime',monospace; font-size:0.55rem; letter-spacing:0.1em; color:var(--mist); margin-left:auto; }
+  .inscribe-body { padding:1.25rem; background:var(--cream); }
+  .inscribe-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .inscribe-field { display:flex; flex-direction:column; gap:0.35rem; }
+  .inscribe-field-label { font-family:'Courier Prime',monospace; font-size:0.55rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--mist); }
+  .inscribe-field input, .inscribe-field select { width:100%; background:white; border:1px solid var(--mist); border-radius:2px; padding:0.5rem 0.75rem; font-family:'Courier Prime',monospace; font-size:0.65rem; color:var(--charcoal); outline:none; transition:border-color 0.2s; -webkit-appearance:none; }
+  .inscribe-field input:focus, .inscribe-field select:focus { border-color:var(--gold); }
+  .inscribe-wallet { margin-bottom:1rem; }
+  .inscribe-wallet input { width:100%; background:white; border:1px solid var(--mist); border-radius:2px; padding:0.5rem 0.75rem; font-family:'Courier Prime',monospace; font-size:0.6rem; color:var(--charcoal); outline:none; transition:border-color 0.2s; }
+  .inscribe-wallet input:focus { border-color:var(--gold); }
+  .inscribe-fee { background:rgba(184,147,74,0.08); border:1px solid rgba(184,147,74,0.3); border-radius:2px; padding:0.65rem 1rem; margin-bottom:1rem; font-family:'Courier Prime',monospace; font-size:0.6rem; color:var(--charcoal); display:flex; justify-content:space-between; align-items:center; }
+  .inscribe-fee-amount { color:var(--gold); font-size:0.7rem; }
+  .btn-inscribe { width:100%; padding:0.85rem; background:var(--ink); color:var(--paper); border:none; font-family:'Courier Prime',monospace; font-size:0.68rem; letter-spacing:0.25em; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:all 0.3s; position:relative; overflow:hidden; }
+  .btn-inscribe::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,#f7931a,#e8821a); transform:translateX(-100%); transition:transform 0.4s ease; }
+  .btn-inscribe:hover::before { transform:translateX(0); }
+  .btn-inscribe span { position:relative; z-index:1; }
+  .btn-inscribe:disabled { opacity:0.4; cursor:not-allowed; }
+  .btn-inscribe:disabled::before { display:none; }
+  .inscribe-success { background:rgba(90,107,82,0.1); border:1px solid var(--sage); border-radius:2px; padding:1rem; margin-top:1rem; display:none; }
+  .inscribe-success.visible { display:block; }
+  .inscribe-success-title { font-family:'Courier Prime',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--sage); margin-bottom:0.5rem; }
+  .inscribe-success-txid { font-family:'Courier Prime',monospace; font-size:0.55rem; color:var(--charcoal); word-break:break-all; margin-bottom:0.5rem; white-space:pre-wrap; }
+  .inscribe-success a { color:var(--gold); font-family:'Courier Prime',monospace; font-size:0.58rem; }
+  @media(max-width:768px){ main{grid-template-columns:1fr} .panel-left{border-right:none;border-bottom:1px solid var(--mist)} header{flex-wrap:wrap;gap:0.5rem} .subtitle,.free-badge{margin-left:0} }
+</style>
+</head>
+<body>
+<header>
+  <span class="wordmark">Prettybrid</span>
+  <h1>Art Style <em>Studio</em></h1>
+  <span class="free-badge">OpenAI · DALL-E 3</span>
+  <span class="subtitle">Upload · Analyse · Generate · Inscribe</span>
+<a href="/gallery.html" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;background:var(--gold);color:white;padding:3px 10px;border-radius:2px;text-decoration:none;align-self:center;">✦ View Gallery</a>
+</header>
+<main>
+  <div class="panel panel-left">
+    <div class="panel-label">I. Reference Works</div>
+    <div class="drop-zone" id="dropZone">
+      <div class="drop-icon">⬡</div>
+      <div class="drop-text">Click to browse or drop files here</div>
+      <div class="drop-sub">jpg, png, webp — panoramic supported</div>
+      <button type="button" class="browse-btn" id="browseBtn">Browse Files</button>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
+    <div class="images-grid" id="imagesGrid"></div>
+    <button class="analyze-btn" id="analyzeBtn" disabled>✦ Analyse Style</button>
+    <div class="style-description" id="styleDescription"></div>
+    <div id="styleTagsSection" style="display:none;">
+      <div class="panel-label" style="margin-top:1rem;">Detected Style Traits</div>
+      <div class="trait-tags" id="styleTags"></div>
+    </div>
+    <div class="style-builder" id="styleBuilder" style="display:none;">
+      <div class="panel-label" style="margin-top:1.5rem;">II. Define Your Style</div>
+      <div class="trait-group"><span class="trait-label">Medium &amp; Technique</span><div class="trait-tags" id="tagsMedium"></div></div>
+      <div class="trait-group"><span class="trait-label">Colour Palette</span><div class="trait-tags" id="tagsPalette"></div></div>
+      <div class="trait-group"><span class="trait-label">Texture &amp; Marks</span><div class="trait-tags" id="tagsTexture"></div></div>
+      <div class="trait-group"><span class="trait-label">Mood &amp; Atmosphere</span><div class="trait-tags" id="tagsMood"></div></div>
+      <div class="trait-group"><span class="trait-label">Composition</span><div class="trait-tags" id="tagsComposition"></div></div>
+    </div>
+  </div>
+  <div class="panel panel-right">
+    <div class="panel-label">III. Generate New Work</div>
+    <div class="prompt-group">
+      <label class="prompt-label" for="promptInput">Subject / Concept</label>
+      <textarea id="promptInput" rows="3" placeholder="Describe what you want to create… e.g. 'a lone figure at the edge of the sea at dusk'"></textarea>
+    </div>
+    <div class="options-row">
+      <div>
+        <label class="prompt-label">Fidelity to Style</label>
+        <select id="fidelitySelect">
+          <option value="strictly">Strict — closely match</option>
+          <option value="strong" selected>Strong — clearly inspired</option>
+          <option value="loose">Loose — loosely inspired</option>
+          <option value="free">Free — spirit only</option>
+        </select>
+      </div>
+      <div>
+        <label class="prompt-label">Extra Emphasis</label>
+        <select id="emphasisSelect">
+          <option value="">— None —</option>
+          <option value="highly detailed">Maximum Detail</option>
+          <option value="cinematic lighting">Cinematic Light</option>
+          <option value="dramatic contrast">Dramatic Contrast</option>
+          <option value="soft diffused light">Soft Light</option>
+          <option value="bold graphic shapes">Bold &amp; Graphic</option>
+          <option value="painterly brushwork">Painterly</option>
+        </select>
+      </div>
+    </div>
+    <div id="promptPreviewWrap" style="display:none;margin-bottom:1.25rem;">
+      <span class="prompt-preview-label">✦ Generation prompt</span>
+      <div class="prompt-preview-box visible" id="promptPreview"></div>
+    </div>
+    <div class="prompt-group">
+      <label class="prompt-label" for="openaiKey">OpenAI API Key</label>
+      <input type="password" id="openaiKey" placeholder="sk-..." autocomplete="off"
+        style="width:100%;background:var(--cream);border:1px solid var(--mist);border-radius:2px;padding:0.65rem 1rem;font-family:'Courier Prime',monospace;font-size:0.7rem;color:var(--ink);outline:none;transition:border-color 0.2s;">
+      <div id="keyStatus" style="font-family:'Courier Prime',monospace;font-size:0.58rem;margin-top:0.4rem;color:var(--sage);display:none;">✓ Key ready</div>
+    </div>
+    <div class="no-images-warning" id="noImagesWarning">⚠ Upload at least one image first</div>
+    <button class="btn-generate" id="generateBtn"><span>✦ &nbsp; Generate New Piece</span></button>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="output-section">
+      <div class="panel-label" style="margin-top:0;">IV. Generated Piece</div>
+      <div class="output-canvas" id="outputCanvas">
+        <div class="output-placeholder"><span class="big-char">◎</span><p>Your new piece will appear here</p></div>
+      </div>
+      <div class="result-actions" id="resultActions">
+        <button class="btn-action" id="addToCollectionBtn">+ Collection</button>
+        <button class="btn-action" id="regenerateBtn">↻ Regenerate</button>
+        <button class="btn-action" id="downloadBtn">↓ Save</button>
+        <button class="btn-action" id="showInscribeBtn" style="border-color:var(--gold);color:var(--gold);">⛓ Inscribe</button>
+      </div>
+      <div class="inscribe-panel" id="inscribePanel">
+        <div class="inscribe-header">
+          <span class="inscribe-header-icon">⛓</span>
+          <span class="inscribe-header-title">Inscribe on Bitcoin Ordinals</span>
+          <span class="inscribe-header-sub">Permanently yours on Bitcoin</span>
+        </div>
+        <div class="inscribe-body">
+          <div class="inscribe-row">
+            <div class="inscribe-field">
+              <span class="inscribe-field-label">Collection</span>
+              <input type="text" id="inscribeCollection" value="Altered States of Reality">
+            </div>
+            <div class="inscribe-field">
+              <span class="inscribe-field-label">Title</span>
+              <input type="text" id="inscribeTitle" placeholder="Piece title">
+            </div>
+          </div>
+          <div class="inscribe-row">
+            <div class="inscribe-field">
+              <span class="inscribe-field-label">Edition Size</span>
+              <select id="inscribeEdition">
+                <option value="1">1 of 1 — Unique</option>
+                <option value="3">Limited to 3</option>
+                <option value="5">Limited to 5</option>
+                <option value="10" selected>Limited to 10</option>
+                <option value="25">Limited to 25</option>
+              </select>
+            </div>
+            <div class="inscribe-field">
+              <span class="inscribe-field-label">Fee Priority</span>
+              <select id="inscribeFee">
+                <option value="economy">Economy — lowest fee</option>
+                <option value="normal" selected>Normal — recommended</option>
+                <option value="fast">Fast — higher fee</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:1rem;">
+            <span class="inscribe-field-label" style="display:block;margin-bottom:0.5rem;">Image to Inscribe</span>
+            <div style="display:flex;gap:0.75rem;align-items:center;background:white;border:1px solid var(--mist);border-radius:2px;padding:0.65rem 0.75rem;">
+              <div id="inscribeImagePreview" style="width:48px;height:48px;border:1px solid var(--mist);border-radius:2px;overflow:hidden;flex-shrink:0;background:var(--cream);display:flex;align-items:center;justify-content:center;">
+                <span style="font-size:1.2rem;opacity:0.3;">◎</span>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div id="inscribeImageName" style="font-family:'Courier Prime',monospace;font-size:0.58rem;color:var(--charcoal);margin-bottom:0.35rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Using generated image</div>
+                <button type="button" id="uploadEditedBtn" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:3px 10px;border-radius:2px;cursor:pointer;">↑ Upload Edited File</button>
+                <button type="button" id="useGeneratedBtn" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);background:transparent;border:1px solid var(--mist);padding:3px 10px;border-radius:2px;cursor:pointer;margin-left:0.5rem;display:none;">Use Generated</button>
+              </div>
+            </div>
+            <input type="file" id="editedFileInput" accept="image/*" style="display:none;">
+          </div>
+          <div class="inscribe-wallet inscribe-field">
+            <span class="inscribe-field-label">Your Bitcoin Receive Address (Xverse)</span>
+            <input type="text" id="inscribeWallet" placeholder="bc1p... (paste your Xverse address)">
+          </div>
+          <div class="inscribe-fee">
+            <span>Estimated inscription fee</span>
+            <span class="inscribe-fee-amount" id="inscribeFeeAmount">Calculating…</span>
+          </div>
+          <button class="btn-inscribe" id="inscribeBtn" type="button">
+            <span>⛓ &nbsp; Inscribe on Bitcoin</span>
+          </button>
+          <div class="inscribe-success" id="inscribeSuccess">
+            <div class="inscribe-success-title">✓ Inscription order created</div>
+            <div class="inscribe-success-txid" id="inscribeTxId"></div>
+            <a href="#" id="inscribeViewLink" target="_blank">View order & pay invoice →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="history-strip" id="historyStrip">
+  <div class="panel-label">Collection</div>
+  <div class="history-grid" id="historyGrid"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const TRAITS={medium:['oil painting','watercolour','acrylic','gouache','charcoal drawing','ink drawing','pastel','digital painting','mixed media','encaustic','photography','film photography','long exposure photography','aerial photography'],palette:['muted earth tones','vibrant saturated','monochromatic','warm golden hues','cool blues and greys','high contrast black and white','pastel soft tones','dark moody palette','rich jewel tones','natural ochres'],texture:['thick impasto','loose gestural brushwork','fine detailed linework','smooth blended tones','rough textured surface','expressive mark-making','delicate washes','bold flat areas','dry brush','flowing fluid marks'],mood:['melancholic introspective','calm meditative','raw intense','dreamlike surreal','intimate tender','mysterious shadowed','joyful energetic','dramatic tension','ethereal otherworldly','lyrical poetic'],composition:['panoramic wide landscape','intimate close crop','strong horizon line','dynamic diagonal','central figure','asymmetric balance','negative space','layered depth','minimal sparse','dense complex']};
+const state={images:[],selectedTraits:{medium:[],palette:[],texture:[],mood:[],composition:[]},styleAnalysis:'',generatedDataUrl:null,generatedTitle:'',collection:[]};
+const fileInput=document.getElementById('fileInput');
+const browseBtn=document.getElementById('browseBtn');
+const dropZone=document.getElementById('dropZone');
+const imagesGrid=document.getElementById('imagesGrid');
+const styleBuilder=document.getElementById('styleBuilder');
+const promptInput=document.getElementById('promptInput');
+const fidelitySelect=document.getElementById('fidelitySelect');
+const emphasisSelect=document.getElementById('emphasisSelect');
+const generateBtn=document.getElementById('generateBtn');
+const outputCanvas=document.getElementById('outputCanvas');
+const resultActions=document.getElementById('resultActions');
+const noImagesWarn=document.getElementById('noImagesWarning');
+const errorMsg=document.getElementById('errorMsg');
+const historyStrip=document.getElementById('historyStrip');
+const historyGrid=document.getElementById('historyGrid');
+const toastEl=document.getElementById('toast');
+const promptPreviewWrap=document.getElementById('promptPreviewWrap');
+const promptPreview=document.getElementById('promptPreview');
+const analyzeBtn=document.getElementById('analyzeBtn');
+const styleDesc=document.getElementById('styleDescription');
+const styleTagsSection=document.getElementById('styleTagsSection');
+const styleTagsEl=document.getElementById('styleTags');
+const openaiKeyEl=document.getElementById('openaiKey');
+const keyStatus=document.getElementById('keyStatus');
+browseBtn.addEventListener('click',function(){fileInput.click();});
+fileInput.addEventListener('change',function(e){if(e.target.files&&e.target.files.length){handleFiles(Array.from(e.target.files));}});
+dropZone.addEventListener('dragover',function(e){e.preventDefault();dropZone.classList.add('drag-over');});
+dropZone.addEventListener('dragleave',function(){dropZone.classList.remove('drag-over');});
+dropZone.addEventListener('drop',function(e){e.preventDefault();dropZone.classList.remove('drag-over');if(e.dataTransfer.files&&e.dataTransfer.files.length)handleFiles(Array.from(e.dataTransfer.files));});
+openaiKeyEl.addEventListener('input',function(){keyStatus.style.display=openaiKeyEl.value.trim().startsWith('sk-')?'block':'none';});
+openaiKeyEl.addEventListener('focus',function(){openaiKeyEl.style.borderColor='var(--gold)';});
+openaiKeyEl.addEventListener('blur',function(){openaiKeyEl.style.borderColor='var(--mist)';});
+(function(){const map={medium:'tagsMedium',palette:'tagsPalette',texture:'tagsTexture',mood:'tagsMood',composition:'tagsComposition'};Object.entries(map).forEach(function(entry){var key=entry[0],elId=entry[1];var c=document.getElementById(elId);TRAITS[key].forEach(function(trait){var b=document.createElement('button');b.className='trait-tag';b.textContent=trait;b.type='button';b.addEventListener('click',function(){var i=state.selectedTraits[key].indexOf(trait);if(i===-1){state.selectedTraits[key].push(trait);b.classList.add('active');}else{state.selectedTraits[key].splice(i,1);b.classList.remove('active');}updatePromptPreview();});c.appendChild(b);});});})();
+const fp={strictly:'strictly in the style of',strong:'inspired by',loose:'loosely inspired by',free:'with the spirit of'};
+function buildPrompt(){var concept=promptInput.value.trim()||'a landscape';var analysedActive=Array.from(styleTagsEl.querySelectorAll('.trait-tag.active')).map(function(b){return b.textContent;});var manualTraits=Object.values(state.selectedTraits).reduce(function(a,b){return a.concat(b);},[]);var allStyle=Array.from(new Set(analysedActive.concat(manualTraits)));var style=allStyle.length>0?allStyle.join(', '):'painting';var fid=fp[fidelitySelect.value]||fp.strong;var em=emphasisSelect.value;var p=concept+', '+fid+' '+style;if(state.styleAnalysis)p+='. Style: '+state.styleAnalysis.slice(0,300);if(em)p+=', '+em;return p;}
+function updatePromptPreview(){promptPreview.textContent=buildPrompt();promptPreviewWrap.style.display='block';}
+promptInput.addEventListener('input',updatePromptPreview);
+fidelitySelect.addEventListener('change',updatePromptPreview);
+emphasisSelect.addEventListener('change',updatePromptPreview);
+function handleFiles(files){files.forEach(function(file){if(!file.type.startsWith('image/'))return;var reader=new FileReader();reader.onload=function(ev){var dataUrl=ev.target.result;var tmp=new Image();tmp.onload=function(){state.images.push({id:Date.now()+Math.random(),dataUrl:dataUrl,file:file,selected:false,naturalW:tmp.naturalWidth,naturalH:tmp.naturalHeight});renderImages();styleBuilder.style.display='block';analyzeBtn.disabled=false;updatePromptPreview();};tmp.onerror=function(){state.images.push({id:Date.now()+Math.random(),dataUrl:dataUrl,file:file,selected:false,naturalW:0,naturalH:0});renderImages();styleBuilder.style.display='block';analyzeBtn.disabled=false;};tmp.src=dataUrl;};reader.onerror=function(){showToast('Could not read file');};reader.readAsDataURL(file);});}
+function renderImages(){imagesGrid.innerHTML='';state.images.forEach(function(img){var wrap=document.createElement('div');wrap.className='thumb-wrap'+(img.selected?' selected':'');var dims=img.naturalW?img.naturalW+'×'+img.naturalH+'px':'';wrap.innerHTML='<img src="'+img.dataUrl+'" alt="artwork"><div class="thumb-meta"><span class="thumb-dims">'+dims+'</span>'+(img.selected?'<span class="thumb-sel">✓ selected</span>':'')+'</div><button class="thumb-remove" type="button" title="Remove">✕</button>';wrap.addEventListener('click',function(e){if(e.target.classList.contains('thumb-remove'))return;img.selected=!img.selected;renderImages();updatePromptPreview();});wrap.querySelector('.thumb-remove').addEventListener('click',function(e){e.stopPropagation();state.images=state.images.filter(function(i){return i.id!==img.id;});renderImages();if(!state.images.length){styleBuilder.style.display='none';analyzeBtn.disabled=true;}});imagesGrid.appendChild(wrap);});}
+function getOutputSize(){var sel=state.images.filter(function(i){return i.selected;});var src=sel[0]||state.images[0];if(!src||!src.naturalW||!src.naturalH)return{str:'1024x1024',w:1024,h:1024};var ratio=src.naturalW/src.naturalH;if(ratio>=1.6)return{str:'1792x1024',w:1792,h:1024};if(ratio<=0.75)return{str:'1024x1792',w:1024,h:1792};return{str:'1024x1024',w:1024,h:1024};}
+analyzeBtn.addEventListener('click',async function(){
+var sel=state.images.filter(function(i){return i.selected;});
+var src=sel[0]||state.images[0];
+if(!src){showToast('Upload an image first');return;}
+var apiKey=openaiKeyEl.value.trim();
+if(!apiKey){showToast('Enter your OpenAI API key first');openaiKeyEl.focus();return;}
+analyzeBtn.disabled=true;analyzeBtn.textContent='… Analysing';
+styleDesc.style.display='none';styleTagsSection.style.display='none';
+try{
+var resp=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'gpt-4o',max_tokens:500,messages:[{role:'user',content:[{type:'image_url',image_url:{url:src.dataUrl}},{type:'text',text:'You are an expert art critic. Analyse the visual style of this artwork. Return ONLY valid JSON, no markdown: {"description":"3-5 sentence exhibition catalogue description of technique, palette, mood, and motifs","tags":["tag1","tag2","tag3","tag4","tag5","tag6"]}. Tags must be short style traits like: loose gestural brushwork, muted earth tones, chiaroscuro contrast, expressive linework, soft impasto.'}]}]})});
+if(!resp.ok){var err=await resp.json();throw new Error(err.error&&err.error.message?err.error.message:resp.status);}
+var data=await resp.json();
+var text=data.choices[0].message.content;
+var clean=text.replace(/[\s\S]*?\n|/g,'').trim().replace(/^[^{]*/,'').replace(/[^}]*$/,'');
+var parsed=JSON.parse(clean);
+state.styleAnalysis=parsed.description||'';
+styleDesc.textContent=parsed.description||'';
+styleDesc.style.display='block';
+styleTagsEl.innerHTML='';
+(parsed.tags||[]).forEach(function(tag){var b=document.createElement('button');b.className='trait-tag active';b.textContent=tag;b.type='button';b.addEventListener('click',function(){b.classList.toggle('active');updatePromptPreview();});styleTagsEl.appendChild(b);});
+styleTagsSection.style.display='block';
+updatePromptPreview();
+showToast('Style analysed ✦');
+}catch(err){styleDesc.textContent='⚠ Analysis failed: '+err.message;styleDesc.style.display='block';console.error(err);}
+analyzeBtn.disabled=false;analyzeBtn.textContent='↺ Re-analyse Style';
+});
+generateBtn.addEventListener('click',generatePiece);
+document.getElementById('regenerateBtn').addEventListener('click',generatePiece);
+async function generatePiece(){
+if(!state.images.length){noImagesWarn.style.display='block';setTimeout(function(){noImagesWarn.style.display='none';},3000);return;}
+var apiKey=openaiKeyEl.value.trim();
+if(!apiKey){errorMsg.textContent='Enter your OpenAI API key first';errorMsg.classList.add('visible');openaiKeyEl.focus();return;}
+noImagesWarn.style.display='none';errorMsg.classList.remove('visible');resultActions.style.display='none';generateBtn.disabled=true;
+var size=getOutputSize();
+var prompt=buildPrompt();
+updatePromptPreview();
+outputCanvas.innerHTML='<div class="loading-overlay"><div class="loading-bar"></div><div class="loading-text">Generating at '+size.w+'×'+size.h+'px<br>Please wait 20–30 seconds…</div></div>';
+try{
+var resp=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'dall-e-3',prompt:prompt.slice(0,4000),n:1,size:size.str,response_format:'b64_json'})});
+if(!resp.ok){var e=await resp.json();throw new Error(e.error&&e.error.message?e.error.message:resp.status);}
+var data=await resp.json();
+var imgSrc='data:image/png;base64,'+data.data[0].b64_json;
+state.generatedDataUrl=imgSrc;
+state.generatedTitle=(promptInput.value.trim()||'artwork').slice(0,40);
+var imgEl=document.createElement('img');imgEl.src=imgSrc;imgEl.alt='generated artwork';
+imgEl.style.cssText='width:100%;display:block;animation:fadeIn 0.6s ease;border-radius:2px 2px 0 0;';
+var wrapper=document.createElement('div');wrapper.style.width='100%';
+var meta=document.createElement('div');meta.style.cssText='padding:0.85rem 1.25rem;background:var(--cream);border:1px solid var(--mist);border-top:none;border-radius:0 0 2px 2px;';
+meta.innerHTML='<div style="font-family:\'Courier Prime\',monospace;font-size:0.55rem;color:var(--mist);letter-spacing:0.1em;">'+size.w+'×'+size.h+'px · DALL-E 3 · OpenAI</div>';
+wrapper.appendChild(imgEl);wrapper.appendChild(meta);
+outputCanvas.innerHTML='';outputCanvas.appendChild(wrapper);
+resultActions.style.display='flex';showToast('New piece generated ✦');
+}catch(err){
+outputCanvas.innerHTML='<div class="output-placeholder"><span class="big-char">◎</span><p>Generation failed — try again</p></div>';
+errorMsg.textContent='Error: '+err.message;errorMsg.classList.add('visible');console.error(err);
+}
+generateBtn.disabled=false;
+}
+document.getElementById('addToCollectionBtn').addEventListener('click',function(){if(!state.generatedDataUrl)return;var item={imgSrc:state.generatedDataUrl,html:outputCanvas.innerHTML};state.collection.push(item);var thumb=document.createElement('div');thumb.className='history-thumb';thumb.innerHTML='<img src="'+item.imgSrc+'" alt="collected">';thumb.addEventListener('click',function(){outputCanvas.innerHTML=item.html;state.generatedDataUrl=item.imgSrc;resultActions.style.display='flex';});historyGrid.appendChild(thumb);historyStrip.classList.add('visible');showToast('Added to collection');});
+document.getElementById('downloadBtn').addEventListener('click',function(){if(!state.generatedDataUrl)return;var a=document.createElement('a');a.href=state.generatedDataUrl;a.download=(state.generatedTitle||'artwork').replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.png';a.click();showToast('Image saved');});
+var toastTimer;
+function showToast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove('show');},3000);}
+const inscribePanel=document.getElementById('inscribePanel');
+const inscribeBtn=document.getElementById('inscribeBtn');
+const inscribeFeeAmount=document.getElementById('inscribeFeeAmount');
+const inscribeSuccess=document.getElementById('inscribeSuccess');
+const inscribeTxId=document.getElementById('inscribeTxId');
+const inscribeViewLink=document.getElementById('inscribeViewLink');
+const inscribeWallet=document.getElementById('inscribeWallet');
+const inscribeFeeSelect=document.getElementById('inscribeFee');
+const inscribeTitle=document.getElementById('inscribeTitle');
+let inscribeImageDataUrl=null;
+const editedFileInput=document.getElementById('editedFileInput');
+const inscribeImagePreview=document.getElementById('inscribeImagePreview');
+const inscribeImageName=document.getElementById('inscribeImageName');
+const useGeneratedBtn=document.getElementById('useGeneratedBtn');
+document.getElementById('uploadEditedBtn').addEventListener('click',function(){editedFileInput.click();});
+editedFileInput.addEventListener('change',function(e){
+if(!e.target.files||!e.target.files.length)return;
+var file=e.target.files[0];
+var reader=new FileReader();
+reader.onload=function(ev){
+inscribeImageDataUrl=ev.target.result;
+inscribeImagePreview.innerHTML='<img src="'+inscribeImageDataUrl+'" style="width:100%;height:100%;object-fit:cover;">';
+inscribeImageName.textContent=file.name;
+useGeneratedBtn.style.display='inline-block';
+showToast('Edited file ready for inscription ✦');
+};
+reader.readAsDataURL(file);
+});
+useGeneratedBtn.addEventListener('click',function(){
+inscribeImageDataUrl=null;
+if(state.generatedDataUrl){inscribeImagePreview.innerHTML='<img src="'+state.generatedDataUrl+'" style="width:100%;height:100%;object-fit:cover;">';}
+else{inscribeImagePreview.innerHTML='<span style="font-size:1.2rem;opacity:0.3;">◎</span>';}
+inscribeImageName.textContent='Using generated image';
+useGeneratedBtn.style.display='none';
+showToast('Using generated image');
+});
+document.getElementById('showInscribeBtn').addEventListener('click',function(){
+inscribePanel.classList.toggle('visible');
+if(state.generatedTitle)inscribeTitle.value=state.generatedTitle;
+if(state.generatedDataUrl&&!inscribeImageDataUrl){inscribeImagePreview.innerHTML='<img src="'+state.generatedDataUrl+'" style="width:100%;height:100%;object-fit:cover;">';}
+fetchFeeEstimate();
+});
+inscribeFeeSelect.addEventListener('change',fetchFeeEstimate);
+function getFeeRate(){var val=inscribeFeeSelect.value;if(val==='economy')return 5;if(val==='fast')return 25;return 12;}
+async function fetchFeeEstimate(){inscribeFeeAmount.textContent='Calculating…';try{var resp=await fetch('https://ordinalsbot.com/api/iscriptionprice?size=500000&fee='+getFeeRate());if(resp.ok){var data=await resp.json();if(data&&data.amount){inscribeFeeAmount.textContent=(data.amount/100000000).toFixed(6)+' BTC';}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}catch(e){inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}
+inscribeBtn.addEventListener('click',async function(){
+var imageToInscribe=inscribeImageDataUrl||state.generatedDataUrl;
+if(!imageToInscribe){showToast('Generate or upload an image first');return;}
+var wallet=inscribeWallet.value.trim();
+if(!wallet){showToast('Enter your Bitcoin receive address');inscribeWallet.focus();return;}
+if(!wallet.startsWith('bc1')){showToast('Enter a valid Bitcoin address starting with bc1');return;}
+inscribeBtn.disabled=true;inscribeBtn.querySelector('span').textContent='⛓  Preparing inscription…';
+inscribeSuccess.classList.remove('visible');
+try{
+var base64Data=imageToInscribe.split(',')[1];
+var byteChars=atob(base64Data);var byteArr=new Uint8Array(byteChars.length);
+for(var i=0;i<byteChars.length;i++)byteArr[i]=byteChars.charCodeAt(i);
+var blob=new Blob([byteArr],{type:'image/png'});
+var title=inscribeTitle.value.trim()||state.generatedTitle||'Untitled';
+var formData=new FormData();
+formData.append('files',blob,title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.png');
+formData.append('receiveAddress',wallet);
+formData.append('fee',getFeeRate());
+formData.append('lowPostage','true');
+var resp=await fetch('https://ordinalsbot.com/api/order',{method:'POST',body:formData});
+if(!resp.ok){var e=await resp.json();throw new Error(e.error||'Inscription failed '+resp.status);}
+var data=await resp.json();
+var orderId=data.id||data.orderId||'';
+var payAddress=data.paymentAddress||(data.charge&&data.charge.address)||'';
+inscribeSuccess.classList.add('visible');
+inscribeTxId.textContent='Order ID: '+orderId+(payAddress?'\nPay to: '+payAddress:'');
+inscribeViewLink.href='https://ordinalsbot.com/order/'+orderId;
+inscribeViewLink.textContent='View order & pay invoice →';
+showToast('Inscription order created ✦');
+}catch(err){showToast('Error: '+err.message);console.error(err);}
+inscribeBtn.disabled=false;inscribeBtn.querySelector('span').textContent='⛓  Inscribe on Bitcoin';
+});
+</script>
+</body>
+</html>
