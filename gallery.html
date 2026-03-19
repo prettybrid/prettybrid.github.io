@@ -7,201 +7,239 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#0d0d0b;--paper:#f5f0e8;--cream:#ede8db;--gold:#b8934a;--rust:#8b3a2a;--sage:#5a6b52;--charcoal:#2a2a26;--mist:#c8c2b4;--btc:#f7931a}
+:root{--ink:#0d0d0b;--paper:#f5f0e8;--gold:#b8934a;--charcoal:#2a2a26;--mist:#c8c2b4;--btc:#f7931a}
 body{background:var(--ink);color:var(--paper);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden}
 #splash{position:fixed;inset:0;background:var(--ink);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem}
-.splash-wordmark{font-family:'Courier Prime',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.5em;color:var(--gold);text-transform:uppercase}
-.splash-title{font-size:clamp(3rem,8vw,6rem);font-weight:300;font-style:italic;line-height:1;color:var(--paper);text-align:center}
-.splash-title em{font-style:normal;color:var(--gold)}
-.splash-collection{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--mist);text-align:center}
-.splash-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--gold),transparent)}
-.splash-enter{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--paper);background:transparent;border:1px solid var(--gold);padding:0.85rem 2.5rem;cursor:pointer;transition:all 0.3s}
-.splash-enter:hover{background:var(--gold);color:var(--ink)}
-.splash-btc{font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.2em;color:var(--mist)}
+.sp-wm{font-family:'Courier Prime',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.5em;color:var(--gold);text-transform:uppercase}
+.sp-title{font-size:clamp(3rem,8vw,6rem);font-weight:300;font-style:italic;line-height:1;color:var(--paper);text-align:center}
+.sp-title em{font-style:normal;color:var(--gold)}
+.sp-coll{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--mist);text-align:center}
+.sp-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--gold),transparent)}
+.sp-btn{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--paper);background:transparent;border:1px solid var(--gold);padding:0.85rem 2.5rem;cursor:pointer}
+.sp-btn:hover{background:var(--gold);color:var(--ink)}
+.sp-btc{font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.2em;color:var(--mist)}
 nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(13,13,11,0.98),rgba(13,13,11,0.7))}
-.nav-wordmark{font-family:'Courier Prime',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;text-decoration:none}
-.nav-links{display:flex;gap:2rem;align-items:center}
-.nav-link{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);text-decoration:none;cursor:pointer}
-.nav-link:hover{color:var(--gold)}
-.nav-studio{border:1px solid var(--gold);color:var(--gold);padding:0.4rem 1rem;border-radius:2px}
-.nav-studio:hover{background:var(--gold);color:var(--ink)}
+.nw{font-family:'Courier Prime',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;text-decoration:none}
+.nl-wrap{display:flex;gap:2rem;align-items:center}
+.nl{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);cursor:pointer}
+.nl:hover{color:var(--gold)}
+.ns{border:1px solid var(--gold);color:var(--gold);padding:0.4rem 1rem;border-radius:2px;text-decoration:none}
+.ns:hover{background:var(--gold);color:var(--ink)}
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 3rem 4rem;text-align:center}
-.hero-label{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
-.hero-title{font-size:clamp(2.5rem,6vw,5rem);font-weight:300;font-style:italic;line-height:1.1;color:var(--paper);margin-bottom:1rem}
-.hero-title em{font-style:normal;color:var(--gold)}
-.hero-statement{max-width:600px;font-size:1.15rem;line-height:1.8;color:#d4cfc4;font-style:italic;margin-bottom:2rem}
-.hero-meta{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
-.hero-meta span::before{content:'--';color:var(--gold);margin-right:0.5rem}
-.hero-scroll{margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;cursor:pointer}
-.hero-scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease-in-out infinite}
-.hero-scroll-label{font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--mist)}
-@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
-.gallery{padding:4rem 0}
-.gallery-section-label{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:4rem;display:flex;align-items:center;justify-content:center;gap:1.5rem}
-.gallery-section-label::before,.gallery-section-label::after{content:'';flex:1;max-width:200px;height:1px;background:var(--gold);opacity:0.3}
-.piece{margin-bottom:8rem;animation:fadeIn 0.8s ease both}
-.piece-image-wrap{width:100%;position:relative;overflow:hidden;background:var(--charcoal)}
-.piece-image-wrap img{width:100%;height:auto;display:block;transition:transform 0.8s ease}
-.piece-image-wrap:hover img{transform:scale(1.02)}
-.piece-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,13,11,0.8) 0%,transparent 40%);pointer-events:none}
-.piece-info{max-width:900px;margin:0 auto;padding:2.5rem 3rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start}
-.piece-collection{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem}
-.piece-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;font-style:italic;color:var(--paper);margin-bottom:0.75rem;line-height:1.1}
-.piece-details{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
-.piece-detail{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:#b8b2a6}
-.piece-detail strong{color:var(--paper)}
-.piece-actions{display:flex;flex-direction:column;gap:0.75rem;align-items:flex-end}
-.piece-price{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);text-align:right}
-.piece-price .amount{font-size:1.4rem;display:block;color:var(--paper);margin-top:0.25rem}
-.btn-purchase{font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;padding:0.75rem 1.5rem;background:var(--gold);color:var(--ink);border:none;cursor:pointer;transition:all 0.3s;border-radius:2px;white-space:nowrap}
-.btn-purchase:hover{background:var(--paper)}
-.btn-inquire{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.65rem 1.5rem;background:transparent;color:var(--mist);border:1px solid var(--mist);cursor:pointer;transition:all 0.3s;border-radius:2px;white-space:nowrap}
-.btn-inquire:hover{border-color:var(--gold);color:var(--gold)}
-.piece-btc-badge{font-family:'Courier Prime',monospace;font-size:0.52rem;letter-spacing:0.1em;color:var(--btc);margin-top:0.5rem}
-.admin-toggle{position:fixed;bottom:2rem;left:2rem;z-index:500}
-.btn-admin{font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 1rem;background:rgba(13,13,11,0.9);color:var(--mist);border:1px solid var(--charcoal);cursor:pointer;border-radius:2px}
-.admin-panel{position:fixed;inset:0;z-index:900;background:rgba(13,13,11,0.97);overflow-y:auto;padding:4rem 3rem;display:none}
-.admin-title{font-family:'Courier Prime',monospace;font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}
-.admin-form{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem}
-.admin-field{display:flex;flex-direction:column;gap:0.4rem}
-.admin-label{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist)}
-.admin-input{background:rgba(255,255,255,0.05);border:1px solid var(--charcoal);border-radius:2px;padding:0.75rem 1rem;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--paper);outline:none}
-.admin-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.btn-admin-save{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;padding:1rem;background:var(--gold);color:var(--ink);border:none;cursor:pointer;border-radius:2px;margin-top:1rem}
-.btn-admin-close{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.65rem 1.5rem;background:transparent;color:var(--mist);border:1px solid var(--charcoal);cursor:pointer;border-radius:2px}
+.h-lbl{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+.h-title{font-size:clamp(2.5rem,6vw,5rem);font-weight:300;font-style:italic;line-height:1.1;color:var(--paper);margin-bottom:1rem}
+.h-title em{font-style:normal;color:var(--gold)}
+.h-stmt{max-width:600px;font-size:1.15rem;line-height:1.8;color:#d4cfc4;font-style:italic;margin-bottom:2rem}
+.h-meta{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.h-meta span::before{content:'-- ';color:var(--gold)}
+.h-scroll{margin-top:3rem;display:flex;flex-direction:column;align-items:center;gap:0.75rem;cursor:pointer}
+.h-scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--gold),transparent);animation:sp 2s ease-in-out infinite}
+.h-scroll-lbl{font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--mist)}
+@keyframes sp{0%,100%{opacity:0.3}50%{opacity:1}}
+.gal{padding:4rem 0}
+.gal-lbl{font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:4rem;display:flex;align-items:center;justify-content:center;gap:1.5rem}
+.gal-lbl::before,.gal-lbl::after{content:'';flex:1;max-width:200px;height:1px;background:var(--gold);opacity:0.3}
+.piece{margin-bottom:8rem;animation:fi 0.8s ease both}
+.piw{width:100%;position:relative;overflow:hidden;background:var(--charcoal)}
+.piw img{width:100%;height:auto;display:block;transition:transform 0.8s ease}
+.piw:hover img{transform:scale(1.02)}
+.pio{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,13,11,0.8) 0%,transparent 40%);pointer-events:none}
+.pii{max-width:900px;margin:0 auto;padding:2.5rem 3rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start}
+.pc{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem}
+.pt{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;font-style:italic;color:var(--paper);margin-bottom:0.75rem;line-height:1.1}
+.pd{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.pdt{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:#b8b2a6}
+.pdt strong{color:var(--paper)}
+.pa{display:flex;flex-direction:column;gap:0.75rem;align-items:flex-end}
+.pp{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);text-align:right}
+.pp .amt{font-size:1.4rem;display:block;color:var(--paper);margin-top:0.25rem}
+.bb{font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;padding:0.75rem 1.5rem;background:var(--gold);color:var(--ink);border:none;cursor:pointer;border-radius:2px;white-space:nowrap}
+.bb:hover{background:var(--paper)}
+.be{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.65rem 1.5rem;background:transparent;color:var(--mist);border:1px solid var(--mist);cursor:pointer;border-radius:2px;white-space:nowrap}
+.be:hover{border-color:var(--gold);color:var(--gold)}
+.btcb{font-family:'Courier Prime',monospace;font-size:0.52rem;letter-spacing:0.1em;color:var(--btc);margin-top:0.5rem}
+.at{position:fixed;bottom:2rem;left:2rem;z-index:500}
+.atb{font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 1rem;background:rgba(13,13,11,0.9);color:var(--mist);border:1px solid var(--charcoal);cursor:pointer;border-radius:2px}
+.ap{position:fixed;inset:0;z-index:900;background:rgba(13,13,11,0.97);overflow-y:auto;padding:4rem 3rem;display:none}
+.apt{font-family:'Courier Prime',monospace;font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}
+.apf{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem}
+.apfd{display:flex;flex-direction:column;gap:0.4rem}
+.apl{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist)}
+.api{background:rgba(255,255,255,0.05);border:1px solid var(--charcoal);border-radius:2px;padding:0.75rem 1rem;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--paper);outline:none}
+.apr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.aps{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;padding:1rem;background:var(--gold);color:var(--ink);border:none;cursor:pointer;border-radius:2px;margin-top:1rem}
+.apc{font-family:'Courier Prime',monospace;font-size:0.58rem;padding:0.65rem 1.5rem;background:transparent;color:var(--mist);border:1px solid var(--charcoal);cursor:pointer;border-radius:2px}
 footer{border-top:1px solid var(--charcoal);padding:3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-wordmark{font-family:'Courier Prime',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase}
-.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap}
-.footer-link{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);text-decoration:none;cursor:pointer}
-.footer-link:hover{color:var(--gold)}
-.footer-copy{font-family:'Courier Prime',monospace;font-size:0.55rem;color:var(--mist);opacity:0.5}
-.toast{position:fixed;bottom:2rem;right:2rem;background:var(--charcoal);color:var(--paper);font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.15em;padding:0.65rem 1.25rem;border-radius:2px;transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:9998;border-left:3px solid var(--gold)}
-.toast.show{transform:translateY(0);opacity:1}
-.modal-overlay{position:fixed;inset:0;background:rgba(13,13,11,0.95);z-index:800;display:none;align-items:center;justify-content:center;padding:2rem}
-.modal-overlay.visible{display:flex}
-.modal{background:var(--charcoal);border:1px solid var(--gold);border-radius:2px;padding:2.5rem;max-width:500px;width:100%}
-.modal-title{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem}
-.modal-piece-title{font-size:1.5rem;font-style:italic;color:var(--paper);margin-bottom:1.5rem}
-.modal-options{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem}
-.modal-option{padding:1rem;border:1px solid var(--mist);border-radius:2px;cursor:pointer;transition:all 0.2s}
-.modal-option:hover{border-color:var(--gold)}
-.modal-option-title{font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--paper);margin-bottom:0.25rem}
-.modal-option-desc{font-size:0.88rem;color:var(--mist);font-style:italic}
-.btn-modal-close{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.65rem 1.5rem;background:transparent;color:var(--mist);border:1px solid var(--charcoal);cursor:pointer;border-radius:2px;width:100%}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:768px){nav{padding:1rem 1.5rem}.piece-info{grid-template-columns:1fr;padding:1.5rem}.piece-actions{align-items:flex-start}.admin-row{grid-template-columns:1fr}footer{flex-direction:column}}
+.fw{font-family:'Courier Prime',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase}
+.fl{display:flex;gap:1.5rem;flex-wrap:wrap}
+.fli{font-family:'Courier Prime',monospace;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);cursor:pointer}
+.fli:hover{color:var(--gold)}
+.fc{font-family:'Courier Prime',monospace;font-size:0.55rem;color:var(--mist);opacity:0.5}
+.tst{position:fixed;bottom:2rem;right:2rem;background:var(--charcoal);color:var(--paper);font-family:'Courier Prime',monospace;font-size:0.62rem;padding:0.65rem 1.25rem;border-radius:2px;transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:9998;border-left:3px solid var(--gold)}
+.tst.show{transform:translateY(0);opacity:1}
+.mbg{position:fixed;inset:0;background:rgba(13,13,11,0.95);z-index:800;display:none;align-items:center;justify-content:center;padding:2rem}
+.mbg.open{display:flex}
+.mb{background:var(--charcoal);border:1px solid var(--gold);border-radius:2px;padding:2.5rem;max-width:500px;width:100%}
+.mt{font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem}
+.mn{font-size:1.5rem;font-style:italic;color:var(--paper);margin-bottom:1.5rem}
+.mo{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem}
+.mop{padding:1rem;border:1px solid var(--mist);border-radius:2px;cursor:pointer;transition:all 0.2s}
+.mop:hover{border-color:var(--gold)}
+.mot{font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--paper);margin-bottom:0.25rem}
+.mod{font-size:0.88rem;color:var(--mist);font-style:italic}
+.mc{font-family:'Courier Prime',monospace;font-size:0.58rem;padding:0.65rem 1.5rem;background:transparent;color:var(--mist);border:1px solid var(--charcoal);cursor:pointer;border-radius:2px;width:100%}
+@keyframes fi{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){nav{padding:1rem 1.5rem}.pii{grid-template-columns:1fr;padding:1.5rem}.pa{align-items:flex-start}.apr{grid-template-columns:1fr}footer{flex-direction:column}}
 </style>
 </head>
 <body>
 
-<div id="splash">
-  <span class="splash-wordmark">Prettybrid</span>
-  <div class="splash-line"></div>
-  <h1 class="splash-title">Altered States<br>of <em>Reality</em></h1>
-  <p class="splash-collection">A collection by Prettybrid - Bitcoin Ordinals</p>
-  <div class="splash-line"></div>
-  <button class="splash-enter" onclick="document.getElementById('splash').style.opacity='0';setTimeout(function(){document.getElementById('splash').style.display='none'},1000);">Enter Collection</button>
-  <p class="splash-btc">Each piece inscribed permanently on Bitcoin</p>
+<div id="sp">
+  <span class="sp-wm">Prettybrid</span>
+  <div class="sp-line"></div>
+  <h1 class="sp-title">Altered States<br>of <em>Reality</em></h1>
+  <p class="sp-coll">A collection by Prettybrid &middot; Bitcoin Ordinals</p>
+  <div class="sp-line"></div>
+  <button class="sp-btn" id="eb">Enter Collection</button>
+  <p class="sp-btc">Each piece inscribed permanently on Bitcoin</p>
 </div>
 
 <nav>
-  <a href="https://prettybrid.com" class="nav-wordmark">Prettybrid</a>
-  <div class="nav-links">
-    <span class="nav-link" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">Collection</span>
-    <span class="nav-link" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">About</span>
-    <span class="nav-link" onclick="window.location.href='mailto:studio@prettybrid.com'">studio@prettybrid.com</span>
-    <a href="https://prettybrid.com" class="nav-link nav-studio">Studio</a>
+  <a href="https://prettybrid.com" class="nw">Prettybrid</a>
+  <div class="nl-wrap">
+    <span class="nl" id="n1">Collection</span>
+    <span class="nl" id="n2">About</span>
+    <span class="nl" id="n3">studio@prettybrid.com</span>
+    <a href="https://prettybrid.com" class="nl ns">Studio</a>
   </div>
 </nav>
 
 <section class="hero">
-  <div class="hero-label">A body of work by Prettybrid</div>
-  <h1 class="hero-title">Altered States<br>of <em>Reality</em></h1>
-  <p class="hero-statement">An exploration of the intersection between human artistic vision and artificial intelligence - each piece begins as an original artwork, analysed and reinterpreted to create new works that exist between the real and the imagined.</p>
-  <div class="hero-meta">
-    <span>Bitcoin Ordinals</span>
-    <span>Limited Editions</span>
-    <span>2026</span>
-  </div>
-  <div class="hero-scroll" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">
-    <div class="hero-scroll-line"></div>
-    <span class="hero-scroll-label">View Collection</span>
-  </div>
+  <div class="h-lbl">A body of work by Prettybrid</div>
+  <h1 class="h-title">Altered States<br>of <em>Reality</em></h1>
+  <p class="h-stmt">An exploration of the intersection between human artistic vision and artificial intelligence &mdash; each piece begins as an original artwork, analysed and reinterpreted to create new works that exist between the real and the imagined.</p>
+  <div class="h-meta"><span>Bitcoin Ordinals</span><span>Limited Editions</span><span>2026</span></div>
+  <div class="h-scroll" id="hs"><div class="h-scroll-line"></div><span class="h-scroll-lbl">View Collection</span></div>
 </section>
 
-<section class="gallery" id="gallery">
-  <div class="gallery-section-label">Collection</div>
-  <div id="galleryPieces"></div>
+<section class="gal" id="gallery">
+  <div class="gal-lbl">Collection</div>
+  <div id="gp"></div>
 </section>
 
 <section id="about" style="padding:6rem 3rem;max-width:800px;margin:0 auto;text-align:center;">
   <div style="font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;">About the Artist</div>
   <h2 style="font-size:2.5rem;font-weight:300;font-style:italic;color:var(--paper);margin-bottom:1.5rem;">Prettybrid</h2>
-  <p style="font-size:1.1rem;line-height:1.9;color:#c8c2b4;font-style:italic;margin-bottom:1.5rem;">Prettybrid is an artist working at the intersection of photography, artificial intelligence, and the permanent ledger of Bitcoin. Each work in the Altered States of Reality collection is conceived, directed, and refined by Prettybrid - using AI as a tool of creative expression rather than a replacement for artistic vision.</p>
-  <p style="font-size:1.1rem;line-height:1.9;color:var(--mist);font-style:italic;margin-bottom:2rem;">All works are inscribed as Bitcoin Ordinals - permanently and immutably recorded on the most secure digital ledger in existence.</p>
-  <button onclick="window.location.href='mailto:studio@prettybrid.com'" style="font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:0.75rem 2rem;border-radius:2px;cursor:pointer;">Contact - studio@prettybrid.com</button>
+  <p style="font-size:1.1rem;line-height:1.9;color:#c8c2b4;font-style:italic;margin-bottom:1.5rem;">Prettybrid is an artist working at the intersection of photography, artificial intelligence, and the permanent ledger of Bitcoin. Each work in the Altered States of Reality collection is conceived, directed, and refined by Prettybrid &mdash; using AI as a tool of creative expression rather than a replacement for artistic vision.</p>
+  <p style="font-size:1.1rem;line-height:1.9;color:var(--mist);font-style:italic;margin-bottom:2rem;">All works are inscribed as Bitcoin Ordinals &mdash; permanently and immutably recorded on the most secure digital ledger in existence.</p>
+  <button id="cb" style="font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:0.75rem 2rem;border-radius:2px;cursor:pointer;">Contact &mdash; studio@prettybrid.com</button>
 </section>
 
 <footer>
-  <span class="footer-wordmark">Prettybrid</span>
-  <div class="footer-links">
-    <span class="footer-link" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">Collection</span>
-    <span class="footer-link" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">About</span>
-    <span class="footer-link" onclick="window.location.href='mailto:studio@prettybrid.com'">studio@prettybrid.com</span>
-  </div>
-  <span class="footer-copy">2026 X IJK-12 LLC - All rights reserved</span>
+  <span class="fw">Prettybrid</span>
+  <div class="fl"><span class="fli" id="f1">Collection</span><span class="fli" id="f2">About</span><span class="fli" id="f3">studio@prettybrid.com</span></div>
+  <span class="fc">&copy; 2026 X IJK-12 LLC</span>
 </footer>
 
-<div class="admin-toggle">
-  <button class="btn-admin" onclick="var p=document.getElementById('adminPanel');p.style.display=p.style.display==='block'?'none':'block';">+ Add Piece</button>
-</div>
+<div class="at"><button class="atb" id="apb">+ Add Piece</button></div>
 
-<div class="admin-panel" id="adminPanel" style="display:none;">
+<div class="ap" id="adp">
   <div style="max-width:700px;margin:0 auto;">
-    <div class="admin-title">Add New Piece to Collection</div>
-    <div class="admin-form">
-      <div class="admin-field">
-        <label class="admin-label">Image File</label>
-        <input type="file" id="adminImageFile" accept="image/*" class="admin-input" onchange="previewAdminImage(this)">
-        <img id="adminImagePreview" style="width:100%;max-height:300px;object-fit:contain;display:none;margin-top:0.5rem;">
+    <div class="apt">Add New Piece to Collection</div>
+    <div class="apf">
+      <div class="apfd"><label class="apl">Image File</label><input type="file" id="ai" accept="image/*" class="api"><img id="aip" style="width:100%;max-height:300px;object-fit:contain;display:none;margin-top:0.5rem;"></div>
+      <div class="apr">
+        <div class="apfd"><label class="apl">Title</label><input type="text" id="at2" class="api" placeholder="Piece title"></div>
+        <div class="apfd"><label class="apl">Collection</label><input type="text" id="ac" class="api" value="Altered States of Reality"></div>
       </div>
-      <div class="admin-row">
-        <div class="admin-field"><label class="admin-label">Title</label><input type="text" id="adminTitle" class="admin-input" placeholder="Piece title"></div>
-        <div class="admin-field"><label class="admin-label">Collection</label><input type="text" id="adminCollection" class="admin-input" value="Altered States of Reality"></div>
+      <div class="apr">
+        <div class="apfd"><label class="apl">Edition</label><input type="text" id="ae" class="api" placeholder="1 of 10"></div>
+        <div class="apfd"><label class="apl">Price</label><input type="text" id="apr2" class="api" placeholder="0.02 BTC"></div>
       </div>
-      <div class="admin-row">
-        <div class="admin-field"><label class="admin-label">Edition</label><input type="text" id="adminEdition" class="admin-input" placeholder="1 of 10"></div>
-        <div class="admin-field"><label class="admin-label">Price</label><input type="text" id="adminPrice" class="admin-input" placeholder="0.02 BTC"></div>
-      </div>
-      <div class="admin-field"><label class="admin-label">Bitcoin Inscription ID</label><input type="text" id="adminInscription" class="admin-input" placeholder="inscription id"></div>
-      <div class="admin-field"><label class="admin-label">Description</label><textarea id="adminDescription" class="admin-input" rows="3" style="resize:vertical;"></textarea></div>
-      <div style="display:flex;gap:1rem;margin-top:0.5rem;">
-        <button class="btn-admin-save" onclick="addPiece()">Add to Collection</button>
-        <button class="btn-admin-close" onclick="document.getElementById('adminPanel').style.display='none';">Cancel</button>
-      </div>
+      <div class="apfd"><label class="apl">Bitcoin Inscription ID</label><input type="text" id="ainsc" class="api" placeholder="inscription id"></div>
+      <div class="apfd"><label class="apl">Description</label><textarea id="ad" class="api" rows="3" style="resize:vertical;"></textarea></div>
+      <div style="display:flex;gap:1rem;margin-top:0.5rem;"><button class="aps" id="svb">Add to Collection</button><button class="apc" id="cnb">Cancel</button></div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="purchaseModal">
-  <div class="modal">
-    <div class="modal-title">Acquire this piece</div>
-    <div class="modal-piece-title" id="modalPieceTitle"></div>
-    <div class="modal-options">
-      <div class="modal-option" onclick="purchaseViaBTC()">
-        <div class="modal-option-title" style="color:var(--btc)">Purchase with Bitcoin</div>
-        <div class="modal-option-desc">Pay directly in Bitcoin. You will receive the Ordinal inscription in your wallet.</div>
-      </div>
-      <div class="modal-option" onclick="purchaseViaEmail()">
-        <div class="modal-option-title">Enquire via Email</div>
-        <div class="modal-option-desc">Contact studio@prettybrid.com to discuss acquisition and payment options.</div>
-      </div>
+<div class="mbg" id="mod">
+  <div class="mb">
+    <div class="mt">Acquire this piece</div>
+    <div class="mn" id="mnt"></div>
+    <div class="mo">
+      <div class="mop" id="ob"><div class="mot" style="color:var(--btc)">Purchase with Bitcoin</div><div class="mod">Pay directly in Bitcoin. You will receive the Ordinal inscription in your wallet.</div></div>
+      <div class="mop" id="oe"><div class="mot">Enquire via Email</div><div class="mod">Contact studio@prettybrid.com to discuss acquisition and payment options.</div></div>
     </div>
-    <button class="btn-modal-close" onclick="closeModal()">Close</button>
+    <button class="mc" id="cls">Close</button>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-<script src="/gallery.js"></script>
+<div class="tst" id="tst"></div>
+
+<script>
+(function(){
+var D=document;
+var pieces=[{img:"/the_desert_speaks_back.png",title:"The Desert Speaks Back",coll:"Altered States of Reality",ed:"1 of 10",price:"0.02 BTC",inscr:"",desc:"The desert does not wait to be photographed. It reads you first."}];
+var cur=null;
+var tt;
+
+function sc(id){var e=D.getElementById(id);if(e)e.scrollIntoView({behavior:"smooth"});}
+function em(s){var a="studio",b="prettybrid.com";window.location.href=a+"\x40"+b+(s?"?subject="+encodeURIComponent(s):"");}
+function toast(m){var t=D.getElementById("tst");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("show");},3000);}
+function openM(i){cur=i;D.getElementById("mnt").textContent=pieces[i].title;D.getElementById("mod").classList.add("open");}
+function closeM(){D.getElementById("mod").classList.remove("open");}
+
+function render(){
+  var c=D.getElementById("gp");
+  if(!pieces.length){c.innerHTML="<div style='text-align:center;padding:6rem 3rem'><div style='font-size:1.5rem;font-style:italic;color:var(--mist)'>The collection is being assembled</div></div>";return;}
+  var h="";
+  for(var i=0;i<pieces.length;i++){
+    var p=pieces[i];
+    var bi=p.inscr?"<span class='pdt'>Inscription <strong>#"+p.inscr.slice(0,8)+"</strong></span>":"<span class='pdt' style='color:var(--gold)'>Inscription pending</span>";
+    var di=p.desc?"<p style='font-style:italic;font-size:0.95rem;color:var(--mist);line-height:1.7;margin-bottom:0.75rem'>"+p.desc+"</p>":"";
+    h+="<div class='piece'><div class='piw'><img src='"+p.img+"' alt='"+p.title+"' loading='lazy'><div class='pio'></div></div>";
+    h+="<div class='pii'><div><div class='pc'>"+p.coll+"</div><h2 class='pt'>"+p.title+"</h2><div class='pd'><span class='pdt'>Edition <strong>"+p.ed+"</strong></span>"+bi+"</div>"+di+"</div>";
+    h+="<div class='pa'><div class='pp'><span style='font-size:0.58rem;color:var(--mist)'>Price</span><span class='amt'>"+p.price+"</span></div><button class='bb' data-i='"+i+"'>Acquire</button><button class='be' data-i='"+i+"'>Enquire</button><div class='btcb'>Inscribed on Bitcoin</div></div></div></div>";
+  }
+  c.innerHTML=h;
+  var bs=c.querySelectorAll(".bb");
+  for(var j=0;j<bs.length;j++){bs[j].onclick=function(){openM(+this.getAttribute("data-i"));};}
+  var es=c.querySelectorAll(".be");
+  for(var k=0;k<es.length;k++){es[k].onclick=function(){em("Enquiry: "+pieces[+this.getAttribute("data-i")].title);};}
+}
+
+D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.opacity="0";setTimeout(function(){s.style.display="none";},1000);};
+D.getElementById("n1").onclick=function(){sc("gallery");};
+D.getElementById("n2").onclick=function(){sc("about");};
+D.getElementById("n3").onclick=function(){em("");};
+D.getElementById("hs").onclick=function(){sc("gallery");};
+D.getElementById("cb").onclick=function(){em("");};
+D.getElementById("f1").onclick=function(){sc("gallery");};
+D.getElementById("f2").onclick=function(){sc("about");};
+D.getElementById("f3").onclick=function(){em("");};
+D.getElementById("cls").onclick=closeM;
+D.getElementById("ob").onclick=function(){closeM();toast("Bitcoin payment coming soon");};
+D.getElementById("oe").onclick=function(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeM();};
+D.getElementById("apb").onclick=function(){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";};
+D.getElementById("cnb").onclick=function(){D.getElementById("adp").style.display="none";};
+D.getElementById("ai").onchange=function(){if(!this.files||!this.files.length)return;var r=new FileReader();r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};r.readAsDataURL(this.files[0]);};
+D.getElementById("svb").onclick=function(){
+  var f=D.getElementById("ai");
+  var t=D.getElementById("at2").value.trim();
+  if(!t){toast("Please enter a title");return;}
+  if(!f.files||!f.files.length){toast("Please select an image");return;}
+  var r=new FileReader();
+  r.onload=function(e){
+    pieces.unshift({img:e.target.result,title:t,coll:D.getElementById("ac").value.trim(),ed:D.getElementById("ae").value.trim(),price:D.getElementById("apr2").value.trim(),inscr:D.getElementById("ainsc").value.trim(),desc:D.getElementById("ad").value.trim()});
+    render();D.getElementById("adp").style.display="none";toast("Piece added!");
+    D.getElementById("at2").value="";D.getElementById("ae").value="";D.getElementById("apr2").value="";D.getElementById("ainsc").value="";D.getElementById("ad").value="";D.getElementById("aip").style.display="none";f.value="";
+  };
+  r.readAsDataURL(f.files[0]);
+};
+
+render();
+})();
+</script>
 </body>
 </html>
