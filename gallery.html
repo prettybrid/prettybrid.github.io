@@ -185,7 +185,7 @@ var cur=null;
 var tt;
 
 function sc(id){var e=D.getElementById(id);if(e)e.scrollIntoView({behavior:"smooth"});}
-function em(s){var a="studio",b="prettybrid.com";window.location.href=a+"\x40"+b+(s?"?subject="+encodeURIComponent(s):"");}
+function em(s){var a="studio@prettybrid.com";var u="mai"+"lto:"+a;window.location.href=u+(s?"?subject="+encodeURIComponent(s):"");}
 function toast(m){var t=D.getElementById("tst");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("show");},3000);}
 function openM(i){cur=i;D.getElementById("mnt").textContent=pieces[i].title;D.getElementById("mod").classList.add("open");}
 function closeM(){D.getElementById("mod").classList.remove("open");}
