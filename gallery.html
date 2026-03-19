@@ -221,7 +221,7 @@ D.getElementById("f3").onclick=function(){em("");};
 D.getElementById("cls").onclick=closeM;
 D.getElementById("ob").onclick=function(){closeM();toast("Bitcoin payment coming soon");};
 D.getElementById("oe").onclick=function(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeM();};
-D.getElementById("apb").onclick=function(){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";};
+D.getElementById("apb").onclick=function(){var pw=prompt("Admin password:");if(pw==="prettybrid2026"){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";}};
 D.getElementById("cnb").onclick=function(){D.getElementById("adp").style.display="none";};
 D.getElementById("ai").onchange=function(){if(!this.files||!this.files.length)return;var r=new FileReader();r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};r.readAsDataURL(this.files[0]);};
 D.getElementById("svb").onclick=function(){
