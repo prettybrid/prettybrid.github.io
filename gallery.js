@@ -32,7 +32,7 @@ function render(){
       var delBtn=adminMode?"<button class='bdel' data-i='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.75rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;margin-top:0.5rem;width:100%;'>Remove</button>":"";
       h+="<div style='cursor:pointer;' class='grid-piece' data-i='"+i+"'>";
       h+="<div style='width:100%;position:relative;overflow:hidden;background:var(--charcoal);aspect-ratio:16/9;'>";
-      h+="<img src='"+p.img+"' alt='"+p.title+"' style='width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s ease;' onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">";
+      h+="<img src='"+p.img+"' alt='"+p.title+"' style='width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s ease;'>";
       h+="</div>";
       h+="<div style='padding:0.75rem 0;'>";
       h+="<div style='font-family:Courier Prime,monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;'>"+p.coll+"</div>";
