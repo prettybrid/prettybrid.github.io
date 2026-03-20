@@ -44,7 +44,7 @@ function render(){
     h+="</div>";
     c.innerHTML=h;
     var gps=c.querySelectorAll(".grid-piece");
-    for(var j=0;j<gps.length;j++){gps[j].onclick=function(e){if(!e.target.classList.contains("bdel"))openM(+this.getAttribute("data-i"));};}
+    for(var j=0;j<gps.length;j++){(function(el){el.onclick=function(e){if(!e.target.classList.contains("bdel"))openM(+el.getAttribute("data-i"));};})(gps[j]);}
   } else {
     var h="";
     for(var i=0;i<pieces.length;i++){
@@ -58,16 +58,16 @@ function render(){
     }
     c.innerHTML=h;
     var bs=c.querySelectorAll(".bb");
-    for(var j=0;j<bs.length;j++){bs[j].onclick=function(){openM(+this.getAttribute("data-i"));};}
+    for(var j=0;j<bs.length;j++){(function(el){el.onclick=function(){openM(+el.getAttribute("data-i"));};})(bs[j]);}
     var es=c.querySelectorAll(".be");
-    for(var k=0;k<es.length;k++){es[k].onclick=function(){em("Enquiry: "+pieces[+this.getAttribute("data-i")].title);};}
+    for(var k=0;k<es.length;k++){(function(el){el.onclick=function(){em("Enquiry: "+pieces[+el.getAttribute("data-i")].title);};})(es[k]);}
   }
 
   var ds=c.querySelectorAll(".bdel");
-  for(var d=0;d<ds.length;d++){ds[d].onclick=function(e){
+  for(var d=0;d<ds.length;d++){(function(el){el.onclick=function(e){
     e.stopPropagation();
     if(confirm("Remove this piece?")){
-      pieces.splice(+this.getAttribute("data-i"),1);
+      pieces.splice(+el.getAttribute("data-i"),1);
       render();toast("Piece removed");
     }
   };}
@@ -115,7 +115,7 @@ function init(){
   D.getElementById("oe").onclick=function(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeM();};
   D.getElementById("apb").onclick=function(){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";};
   D.getElementById("cnb").onclick=function(){D.getElementById("adp").style.display="none";};
-  D.getElementById("ai").onchange=function(){if(!this.files||!this.files.length)return;var r=new FileReader();r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};r.readAsDataURL(this.files[0]);};
+  D.getElementById("ai").onchange=function(){var f=D.getElementById("ai");if(!f.files||!f.files.length)return;var r=new FileReader();r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};r.readAsDataURL(f.files[0]);};
   D.getElementById("svb").onclick=function(){addPiece();};
   D.getElementById("btnCinematic").onclick=function(){setView("cinematic");};
   D.getElementById("btnGrid").onclick=function(){setView("grid");};
