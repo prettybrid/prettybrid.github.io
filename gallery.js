@@ -99,7 +99,7 @@ function addPiece(){
   r.readAsDataURL(f.files[0]);
 }
 
-D.addEventListener("DOMContentLoaded",function(){
+function init(){
   render();
   D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.transition="opacity 0.6s ease";s.style.opacity="0";setTimeout(function(){s.style.display="none";},600);};
   D.getElementById("n1").onclick=function(){sc("gallery");};
@@ -126,4 +126,5 @@ D.addEventListener("DOMContentLoaded",function(){
     timer=setTimeout(function(){clicks=0;},500);
     if(clicks>=3){clicks=0;enterAdmin();}
   };
-});
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
