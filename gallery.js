@@ -1,9 +1,8 @@
 
 var adminMode=false;
-var adminClicks=0;
-var adminTimer=null;
 var pieces=[{img:"/the_desert_speaks_back.png",title:"The Desert Speaks Back",coll:"Altered States of Reality",ed:"1 of 10",price:"0.02 BTC",inscr:"",desc:"The desert does not wait to be photographed. It reads you first."}];
 var cur=null;
+var viewMode="cinematic";
 var tt;
 var D=document;
 
@@ -13,30 +12,63 @@ function toast(m){var t=D.getElementById("tst");t.textContent=m;t.classList.add(
 function openM(i){cur=i;D.getElementById("mnt").textContent=pieces[i].title;D.getElementById("mod").classList.add("open");}
 function closeM(){D.getElementById("mod").classList.remove("open");}
 
+function setView(v){
+  viewMode=v;
+  D.getElementById("btnCinematic").style.borderColor=v==="cinematic"?"var(--gold)":"var(--charcoal)";
+  D.getElementById("btnCinematic").style.color=v==="cinematic"?"var(--gold)":"var(--mist)";
+  D.getElementById("btnGrid").style.borderColor=v==="grid"?"var(--gold)":"var(--charcoal)";
+  D.getElementById("btnGrid").style.color=v==="grid"?"var(--gold)":"var(--mist)";
+  render();
+}
+
 function render(){
   var c=D.getElementById("gp");
   if(!pieces.length){c.innerHTML="<div style='text-align:center;padding:6rem 3rem'><div style='font-size:1.5rem;font-style:italic;color:var(--mist)'>The collection is being assembled</div></div>";return;}
-  var h="";
-  for(var i=0;i<pieces.length;i++){
-    var p=pieces[i];
-    var bi=p.inscr?"<span class='pdt'>Inscription <strong>#"+p.inscr.slice(0,8)+"</strong></span>":"<span class='pdt' style='color:var(--gold)'>Inscription pending</span>";
-    var di=p.desc?"<p style='font-style:italic;font-size:0.95rem;color:var(--mist);line-height:1.7;margin-bottom:0.75rem'>"+p.desc+"</p>":"";
-    var delBtn=adminMode?"<button class='bdel' data-i='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 1rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;margin-top:0.5rem;'>Remove Piece</button>":"";
-    h+="<div class='piece'><div class='piw'><img src='"+p.img+"' alt='"+p.title+"' loading='lazy'><div class='pio'></div></div>";
-    h+="<div class='pii'><div><div class='pc'>"+p.coll+"</div><h2 class='pt'>"+p.title+"</h2><div class='pd'><span class='pdt'>Edition <strong>"+p.ed+"</strong></span>"+bi+"</div>"+di+"</div>";
-    h+="<div class='pa'><div class='pp'><span style='font-size:0.58rem;color:var(--mist)'>Price</span><span class='amt'>"+p.price+"</span></div><button class='bb' data-i='"+i+"'>Acquire</button><button class='be' data-i='"+i+"'>Enquire</button>"+delBtn+"<div class='btcb'>Inscribed on Bitcoin</div></div></div></div>";
+  
+  if(viewMode==="grid"){
+    var h="<div style='display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;padding:0 3rem;max-width:1400px;margin:0 auto;'>";
+    for(var i=0;i<pieces.length;i++){
+      var p=pieces[i];
+      var delBtn=adminMode?"<button class='bdel' data-i='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.75rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;margin-top:0.5rem;width:100%;'>Remove</button>":"";
+      h+="<div style='cursor:pointer;' class='grid-piece' data-i='"+i+"'>";
+      h+="<div style='width:100%;position:relative;overflow:hidden;background:var(--charcoal);aspect-ratio:16/9;'>";
+      h+="<img src='"+p.img+"' alt='"+p.title+"' style='width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s ease;' onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">";
+      h+="</div>";
+      h+="<div style='padding:0.75rem 0;'>";
+      h+="<div style='font-family:Courier Prime,monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.25rem;'>"+p.coll+"</div>";
+      h+="<div style='font-size:1.1rem;font-style:italic;color:var(--paper);margin-bottom:0.25rem;'>"+p.title+"</div>";
+      h+="<div style='font-family:Courier Prime,monospace;font-size:0.55rem;letter-spacing:0.1em;color:var(--mist);'>"+p.ed+" &nbsp;·&nbsp; "+p.price+"</div>";
+      h+=delBtn;
+      h+="</div></div>";
+    }
+    h+="</div>";
+    c.innerHTML=h;
+    var gps=c.querySelectorAll(".grid-piece");
+    for(var j=0;j<gps.length;j++){gps[j].onclick=function(e){if(!e.target.classList.contains("bdel"))openM(+this.getAttribute("data-i"));};}
+  } else {
+    var h="";
+    for(var i=0;i<pieces.length;i++){
+      var p=pieces[i];
+      var bi=p.inscr?"<span class='pdt'>Inscription <strong>#"+p.inscr.slice(0,8)+"</strong></span>":"<span class='pdt' style='color:var(--gold)'>Inscription pending</span>";
+      var di=p.desc?"<p style='font-style:italic;font-size:0.95rem;color:var(--mist);line-height:1.7;margin-bottom:0.75rem'>"+p.desc+"</p>":"";
+      var delBtn=adminMode?"<button class='bdel' data-i='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 1rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;margin-top:0.5rem;'>Remove Piece</button>":"";
+      h+="<div class='piece'><div class='piw'><img src='"+p.img+"' alt='"+p.title+"' loading='lazy'><div class='pio'></div></div>";
+      h+="<div class='pii'><div><div class='pc'>"+p.coll+"</div><h2 class='pt'>"+p.title+"</h2><div class='pd'><span class='pdt'>Edition <strong>"+p.ed+"</strong></span>"+bi+"</div>"+di+"</div>";
+      h+="<div class='pa'><div class='pp'><span style='font-size:0.58rem;color:var(--mist)'>Price</span><span class='amt'>"+p.price+"</span></div><button class='bb' data-i='"+i+"'>Acquire</button><button class='be' data-i='"+i+"'>Enquire</button>"+delBtn+"<div class='btcb'>Inscribed on Bitcoin</div></div></div></div>";
+    }
+    c.innerHTML=h;
+    var bs=c.querySelectorAll(".bb");
+    for(var j=0;j<bs.length;j++){bs[j].onclick=function(){openM(+this.getAttribute("data-i"));};}
+    var es=c.querySelectorAll(".be");
+    for(var k=0;k<es.length;k++){es[k].onclick=function(){em("Enquiry: "+pieces[+this.getAttribute("data-i")].title);};}
   }
-  c.innerHTML=h;
-  var bs=c.querySelectorAll(".bb");
-  for(var j=0;j<bs.length;j++){bs[j].onclick=function(){openM(+this.getAttribute("data-i"));};}
-  var es=c.querySelectorAll(".be");
-  for(var k=0;k<es.length;k++){es[k].onclick=function(){em("Enquiry: "+pieces[+this.getAttribute("data-i")].title);};}
+
   var ds=c.querySelectorAll(".bdel");
-  for(var d=0;d<ds.length;d++){ds[d].onclick=function(){
-    if(confirm("Remove this piece from the gallery?")){
+  for(var d=0;d<ds.length;d++){ds[d].onclick=function(e){
+    e.stopPropagation();
+    if(confirm("Remove this piece?")){
       pieces.splice(+this.getAttribute("data-i"),1);
-      render();
-      toast("Piece removed");
+      render();toast("Piece removed");
     }
   };}
 }
@@ -49,13 +81,6 @@ function enterAdmin(){
     toast("Admin mode active");
     render();
   }
-}
-
-function previewAdminImage(input){
-  if(!input.files||!input.files.length)return;
-  var r=new FileReader();
-  r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};
-  r.readAsDataURL(input.files[0]);
 }
 
 function addPiece(){
@@ -74,11 +99,6 @@ function addPiece(){
   r.readAsDataURL(f.files[0]);
 }
 
-function openModal(i){cur=i;D.getElementById("mnt").textContent=pieces[i].title;D.getElementById("mod").classList.add("open");}
-function closeModal(){D.getElementById("mod").classList.remove("open");}
-function purchaseViaBTC(){closeModal();toast("Bitcoin payment coming soon");}
-function purchaseViaEmail(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeModal();}
-
 D.addEventListener("DOMContentLoaded",function(){
   render();
   D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.opacity="0";setTimeout(function(){s.style.display="none";},1000);};
@@ -90,15 +110,16 @@ D.addEventListener("DOMContentLoaded",function(){
   D.getElementById("f1").onclick=function(){sc("gallery");};
   D.getElementById("f2").onclick=function(){sc("about");};
   D.getElementById("f3").onclick=function(){em("");};
-  D.getElementById("cls").onclick=closeModal;
-  D.getElementById("ob").onclick=function(){closeModal();toast("Bitcoin payment coming soon");};
-  D.getElementById("oe").onclick=function(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeModal();};
+  D.getElementById("cls").onclick=closeM;
+  D.getElementById("ob").onclick=function(){closeM();toast("Bitcoin payment coming soon");};
+  D.getElementById("oe").onclick=function(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeM();};
   D.getElementById("apb").onclick=function(){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";};
   D.getElementById("cnb").onclick=function(){D.getElementById("adp").style.display="none";};
   D.getElementById("ai").onchange=function(){if(!this.files||!this.files.length)return;var r=new FileReader();r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};r.readAsDataURL(this.files[0]);};
   D.getElementById("svb").onclick=function(){addPiece();};
-  
-  // Secret admin activation - triple click copyright
+  D.getElementById("btnCinematic").onclick=function(){setView("cinematic");};
+  D.getElementById("btnGrid").onclick=function(){setView("grid");};
+
   var clicks=0;var timer=null;
   D.getElementById("adminActivate").onclick=function(){
     clicks++;clearTimeout(timer);
