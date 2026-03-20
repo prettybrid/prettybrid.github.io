@@ -101,7 +101,7 @@ function addPiece(){
 
 D.addEventListener("DOMContentLoaded",function(){
   render();
-  D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.opacity="0";setTimeout(function(){s.style.display="none";},1000);};
+  D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.transition="opacity 0.6s ease";s.style.opacity="0";setTimeout(function(){s.style.display="none";},600);};
   D.getElementById("n1").onclick=function(){sc("gallery");};
   D.getElementById("n2").onclick=function(){sc("about");};
   D.getElementById("n3").onclick=function(){em("");};
