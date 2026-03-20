@@ -227,16 +227,16 @@ function render(){
   for(var j=0;j<bs.length;j++){bs[j].onclick=function(){openM(+this.getAttribute("data-i"));};}
   var es=c.querySelectorAll(".be");
   for(var k=0;k<es.length;k++){es[k].onclick=function(){em("Enquiry: "+pieces[+this.getAttribute("data-i")].title);};}
-  if(adminMode){
-    var ds=c.querySelectorAll(".bdel");
-    for(var d=0;d<ds.length;d++){ds[d].onclick=function(){
+  var ds=c.querySelectorAll(".bdel");
+  for(var d=0;d<ds.length;d++){
+    ds[d].style.display=adminMode?"block":"none";
+    ds[d].onclick=function(){
       if(confirm("Delete this piece?")){
         pieces.splice(+this.getAttribute("data-i"),1);
         render();
         showToast("Piece deleted");
       }
     };}
-  }
 }
 
 D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.opacity="0";setTimeout(function(){s.style.display="none";},1000);};
