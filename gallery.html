@@ -138,10 +138,10 @@ footer{border-top:1px solid var(--charcoal);padding:3rem;display:flex;align-item
 <footer>
   <span class="fw">Prettybrid</span>
   <div class="fl"><span class="fli" id="f1">Collection</span><span class="fli" id="f2">About</span><span class="fli" id="f3">studio@prettybrid.com</span></div>
-  <span class="fc">&copy; 2026 X IJK-12 LLC</span>
+  <span class="fc" id="adminActivate" style="cursor:default;">&copy; 2026 X IJK-12 LLC</span>
 </footer>
 
-<div class="at"><button class="atb" id="apb">+ Add Piece</button></div>
+<div class="at" id="adminTog" style="display:none;"><button class="atb" id="apb">+ Add Piece</button></div>
 
 <div class="ap" id="adp">
   <div style="max-width:700px;margin:0 auto;">
@@ -180,6 +180,26 @@ footer{border-top:1px solid var(--charcoal);padding:3rem;display:flex;align-item
 <script>
 (function(){
 var D=document;
+var adminMode=false;
+var adminClicks=0;
+var adminTimer=null;
+
+// Secret activation: triple-click copyright
+D.getElementById("adminActivate").addEventListener("click",function(){
+  adminClicks++;
+  clearTimeout(adminTimer);
+  adminTimer=setTimeout(function(){adminClicks=0;},500);
+  if(adminClicks>=3){
+    adminClicks=0;
+    var pw=prompt("Admin password:");
+    if(pw==="prettybrid2026"){
+      adminMode=true;
+      D.getElementById("adminTog").style.display="block";
+      showToast("Admin mode active");
+      render();
+    }
+  }
+});
 var pieces=[{img:"/the_desert_speaks_back.png",title:"The Desert Speaks Back",coll:"Altered States of Reality",ed:"1 of 10",price:"0.02 BTC",inscr:"",desc:"The desert does not wait to be photographed. It reads you first."}];
 var cur=null;
 var tt;
@@ -207,6 +227,16 @@ function render(){
   for(var j=0;j<bs.length;j++){bs[j].onclick=function(){openM(+this.getAttribute("data-i"));};}
   var es=c.querySelectorAll(".be");
   for(var k=0;k<es.length;k++){es[k].onclick=function(){em("Enquiry: "+pieces[+this.getAttribute("data-i")].title);};}
+  if(adminMode){
+    var ds=c.querySelectorAll(".bdel");
+    for(var d=0;d<ds.length;d++){ds[d].onclick=function(){
+      if(confirm("Delete this piece?")){
+        pieces.splice(+this.getAttribute("data-i"),1);
+        render();
+        showToast("Piece deleted");
+      }
+    };}
+  }
 }
 
 D.getElementById("eb").onclick=function(){var s=D.getElementById("sp");s.style.opacity="0";setTimeout(function(){s.style.display="none";},1000);};
@@ -221,7 +251,7 @@ D.getElementById("f3").onclick=function(){em("");};
 D.getElementById("cls").onclick=closeM;
 D.getElementById("ob").onclick=function(){closeM();toast("Bitcoin payment coming soon");};
 D.getElementById("oe").onclick=function(){if(cur!==null)em("Enquiry: "+pieces[cur].title);closeM();};
-D.getElementById("apb").onclick=function(){var pw=prompt("Admin password:");if(pw==="prettybrid2026"){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";}};
+D.getElementById("apb").onclick=function(){var p=D.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";};
 D.getElementById("cnb").onclick=function(){D.getElementById("adp").style.display="none";};
 D.getElementById("ai").onchange=function(){if(!this.files||!this.files.length)return;var r=new FileReader();r.onload=function(e){var p=D.getElementById("aip");p.src=e.target.result;p.style.display="block";};r.readAsDataURL(this.files[0]);};
 D.getElementById("svb").onclick=function(){
@@ -232,13 +262,27 @@ D.getElementById("svb").onclick=function(){
   var r=new FileReader();
   r.onload=function(e){
     pieces.unshift({img:e.target.result,title:t,coll:D.getElementById("ac").value.trim(),ed:D.getElementById("ae").value.trim(),price:D.getElementById("apr2").value.trim(),inscr:D.getElementById("ainsc").value.trim(),desc:D.getElementById("ad").value.trim()});
-    render();D.getElementById("adp").style.display="none";toast("Piece added!");
+    render();D.getElementById("adp").style.display="none";showToast("Piece added!");savePieces();
     D.getElementById("at2").value="";D.getElementById("ae").value="";D.getElementById("apr2").value="";D.getElementById("ainsc").value="";D.getElementById("ad").value="";D.getElementById("aip").style.display="none";f.value="";
   };
   r.readAsDataURL(f.files[0]);
 };
 
 render();
+
+function savePieces(){
+  var tok=prompt("Enter GitHub token to save permanently:");
+  if(!tok){showToast("Not saved permanently - refresh will lose changes");return;}
+  var content=btoa(unescape(encodeURIComponent(document.documentElement.outerHTML)));
+  var url="https://api.github.com/repos/prettybrid/prettybrid.github.io/contents/gallery.html";
+  fetch(url,{headers:{"Authorization":"token "+tok,"Accept":"application/vnd.github.v3+json"}})
+  .then(r=>r.json()).then(d=>{
+    return fetch(url,{method:"PUT",headers:{"Authorization":"token "+tok,"Accept":"application/vnd.github.v3+json","Content-Type":"application/json"},
+    body:JSON.stringify({message:"Update gallery",content:content,sha:d.sha})});
+  }).then(r=>r.json()).then(()=>{showToast("Saved permanently to GitHub!");})
+  .catch(e=>showToast("Save failed: "+e.message));
+}
+
 })();
 </script>
 </body>
