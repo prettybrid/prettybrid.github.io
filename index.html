@@ -458,7 +458,7 @@ formData.append('files',blob,title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.pn
 formData.append('receiveAddress',wallet);
 formData.append('fee',getFeeRate());
 formData.append('lowPostage','true');
-var resp=await fetch('https://corsproxy.io/?url=https://api.ordinalsbot.com/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files:[{size:byteArr.length,type:'image/jpeg',name:title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.jpg',dataURL:imageToInscribe}],receiveAddress:wallet,fee:getFeeRate(),lowPostage:true})});
+var resp=await fetch('https://api.ordinalsbot.com/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files:[{size:byteArr.length,type:'image/jpeg',name:title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.jpg',dataURL:imageToInscribe}],receiveAddress:wallet,fee:getFeeRate(),lowPostage:true})});
 if(!resp.ok){var e=await resp.json();throw new Error(e.error||'Inscription failed '+resp.status);}
 var data=await resp.json();
 var orderId=data.id||data.orderId||'';
