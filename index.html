@@ -458,7 +458,7 @@ formData.append('files',blob,title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.pn
 formData.append('receiveAddress',wallet);
 formData.append('fee',getFeeRate());
 formData.append('lowPostage','true');
-var resp=await fetch('https://api.ordinalsbot.com/inscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files:[{size:byteArr.length,type:'image/jpeg',name:title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.jpg',dataURL:imageToInscribe}],receiveAddress:wallet,fee:getFeeRate(),lowPostage:true})});
+var resp=await fetch('https://prettybrid-inscription.deletemyinformation8.workers.dev/inscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files:[{size:byteArr.length,type:'image/jpeg',name:title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.jpg',dataURL:imageToInscribe}],receiveAddress:wallet,fee:getFeeRate(),lowPostage:true})});
 if(!resp.ok){var eText=await resp.text();var eObj;try{eObj=JSON.parse(eText);}catch(ex){eObj={};}throw new Error(eObj.error||eObj.message||eText||'Inscription failed '+resp.status);}
 var data=await resp.json();
 var orderId=data.id||data.orderId||'';
