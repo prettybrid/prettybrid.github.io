@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRETTYBRID — Art Style Studio</title>
+<title>PRETTYBRID â Art Style Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -127,22 +127,22 @@
 <header>
   <span class="wordmark">Prettybrid</span>
   <h1>Art Style <em>Studio</em></h1>
-  <span class="free-badge">OpenAI · DALL-E 3</span>
-  <span class="subtitle">Upload · Analyse · Generate · Inscribe</span>
-<a href="/gallery.html" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;background:var(--gold);color:white;padding:3px 10px;border-radius:2px;text-decoration:none;align-self:center;">✦ View Gallery</a>
+  <span class="free-badge">OpenAI Â· DALL-E 3</span>
+  <span class="subtitle">Upload Â· Analyse Â· Generate Â· Inscribe</span>
+<a href="/gallery.html" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;background:var(--gold);color:white;padding:3px 10px;border-radius:2px;text-decoration:none;align-self:center;">â¦ View Gallery</a>
 </header>
 <main>
   <div class="panel panel-left">
     <div class="panel-label">I. Reference Works</div>
     <div class="drop-zone" id="dropZone">
-      <div class="drop-icon">⬡</div>
+      <div class="drop-icon">â¬¡</div>
       <div class="drop-text">Click to browse or drop files here</div>
-      <div class="drop-sub">jpg, png, webp — panoramic supported</div>
+      <div class="drop-sub">jpg, png, webp â panoramic supported</div>
       <button type="button" class="browse-btn" id="browseBtn">Browse Files</button>
     </div>
     <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
     <div class="images-grid" id="imagesGrid"></div>
-    <button class="analyze-btn" id="analyzeBtn" disabled>✦ Analyse Style</button>
+    <button class="analyze-btn" id="analyzeBtn" disabled>â¦ Analyse Style</button>
     <div class="style-description" id="styleDescription"></div>
     <div id="styleTagsSection" style="display:none;">
       <div class="panel-label" style="margin-top:1rem;">Detected Style Traits</div>
@@ -161,22 +161,22 @@
     <div class="panel-label">III. Generate New Work</div>
     <div class="prompt-group">
       <label class="prompt-label" for="promptInput">Subject / Concept</label>
-      <textarea id="promptInput" rows="3" placeholder="Describe what you want to create… e.g. 'a lone figure at the edge of the sea at dusk'"></textarea>
+      <textarea id="promptInput" rows="3" placeholder="Describe what you want to createâ¦ e.g. 'a lone figure at the edge of the sea at dusk'"></textarea>
     </div>
     <div class="options-row">
       <div>
         <label class="prompt-label">Fidelity to Style</label>
         <select id="fidelitySelect">
-          <option value="strictly">Strict — closely match</option>
-          <option value="strong" selected>Strong — clearly inspired</option>
-          <option value="loose">Loose — loosely inspired</option>
-          <option value="free">Free — spirit only</option>
+          <option value="strictly">Strict â closely match</option>
+          <option value="strong" selected>Strong â clearly inspired</option>
+          <option value="loose">Loose â loosely inspired</option>
+          <option value="free">Free â spirit only</option>
         </select>
       </div>
       <div>
         <label class="prompt-label">Extra Emphasis</label>
         <select id="emphasisSelect">
-          <option value="">— None —</option>
+          <option value="">â None â</option>
           <option value="highly detailed">Maximum Detail</option>
           <option value="cinematic lighting">Cinematic Light</option>
           <option value="dramatic contrast">Dramatic Contrast</option>
@@ -187,32 +187,32 @@
       </div>
     </div>
     <div id="promptPreviewWrap" style="display:none;margin-bottom:1.25rem;">
-      <span class="prompt-preview-label">✦ Generation prompt</span>
+      <span class="prompt-preview-label">â¦ Generation prompt</span>
       <div class="prompt-preview-box visible" id="promptPreview"></div>
     </div>
     <div class="prompt-group">
       <label class="prompt-label" for="openaiKey">OpenAI API Key</label>
       <input type="password" id="openaiKey" placeholder="sk-..." autocomplete="off"
         style="width:100%;background:var(--cream);border:1px solid var(--mist);border-radius:2px;padding:0.65rem 1rem;font-family:'Courier Prime',monospace;font-size:0.7rem;color:var(--ink);outline:none;transition:border-color 0.2s;">
-      <div id="keyStatus" style="font-family:'Courier Prime',monospace;font-size:0.58rem;margin-top:0.4rem;color:var(--sage);display:none;">✓ Key ready</div>
+      <div id="keyStatus" style="font-family:'Courier Prime',monospace;font-size:0.58rem;margin-top:0.4rem;color:var(--sage);display:none;">â Key ready</div>
     </div>
-    <div class="no-images-warning" id="noImagesWarning">⚠ Upload at least one image first</div>
-    <button class="btn-generate" id="generateBtn"><span>✦ &nbsp; Generate New Piece</span></button>
+    <div class="no-images-warning" id="noImagesWarning">â  Upload at least one image first</div>
+    <button class="btn-generate" id="generateBtn"><span>â¦ &nbsp; Generate New Piece</span></button>
     <div class="error-msg" id="errorMsg"></div>
     <div class="output-section">
       <div class="panel-label" style="margin-top:0;">IV. Generated Piece</div>
       <div class="output-canvas" id="outputCanvas">
-        <div class="output-placeholder"><span class="big-char">◎</span><p>Your new piece will appear here</p></div>
+        <div class="output-placeholder"><span class="big-char">â</span><p>Your new piece will appear here</p></div>
       </div>
       <div class="result-actions" id="resultActions">
         <button class="btn-action" id="addToCollectionBtn">+ Collection</button>
-        <button class="btn-action" id="regenerateBtn">↻ Regenerate</button>
-        <button class="btn-action" id="downloadBtn">↓ Save</button>
-        <button class="btn-action" id="showInscribeBtn" style="border-color:var(--gold);color:var(--gold);">⛓ Inscribe</button>
+        <button class="btn-action" id="regenerateBtn">â» Regenerate</button>
+        <button class="btn-action" id="downloadBtn">â Save</button>
+        <button class="btn-action" id="showInscribeBtn" style="border-color:var(--gold);color:var(--gold);">â Inscribe</button>
       </div>
       <div class="inscribe-panel" id="inscribePanel">
         <div class="inscribe-header">
-          <span class="inscribe-header-icon">⛓</span>
+          <span class="inscribe-header-icon">â</span>
           <span class="inscribe-header-title">Inscribe on Bitcoin Ordinals</span>
           <span class="inscribe-header-sub">Permanently yours on Bitcoin</span>
         </div>
@@ -231,7 +231,7 @@
             <div class="inscribe-field">
               <span class="inscribe-field-label">Edition Size</span>
               <select id="inscribeEdition">
-                <option value="1">1 of 1 — Unique</option>
+                <option value="1">1 of 1 â Unique</option>
                 <option value="3">Limited to 3</option>
                 <option value="5">Limited to 5</option>
                 <option value="10" selected>Limited to 10</option>
@@ -241,9 +241,9 @@
             <div class="inscribe-field">
               <span class="inscribe-field-label">Fee Priority</span>
               <select id="inscribeFee">
-                <option value="economy">Economy — lowest fee</option>
-                <option value="normal" selected>Normal — recommended</option>
-                <option value="fast">Fast — higher fee</option>
+                <option value="economy">Economy â lowest fee</option>
+                <option value="normal" selected>Normal â recommended</option>
+                <option value="fast">Fast â higher fee</option>
               </select>
             </div>
           </div>
@@ -251,11 +251,11 @@
             <span class="inscribe-field-label" style="display:block;margin-bottom:0.5rem;">Image to Inscribe</span>
             <div style="display:flex;gap:0.75rem;align-items:center;background:white;border:1px solid var(--mist);border-radius:2px;padding:0.65rem 0.75rem;">
               <div id="inscribeImagePreview" style="width:48px;height:48px;border:1px solid var(--mist);border-radius:2px;overflow:hidden;flex-shrink:0;background:var(--cream);display:flex;align-items:center;justify-content:center;">
-                <span style="font-size:1.2rem;opacity:0.3;">◎</span>
+                <span style="font-size:1.2rem;opacity:0.3;">â</span>
               </div>
               <div style="flex:1;min-width:0;">
                 <div id="inscribeImageName" style="font-family:'Courier Prime',monospace;font-size:0.58rem;color:var(--charcoal);margin-bottom:0.35rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Using generated image</div>
-                <button type="button" id="uploadEditedBtn" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:3px 10px;border-radius:2px;cursor:pointer;">↑ Upload Edited File</button>
+                <button type="button" id="uploadEditedBtn" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--gold);padding:3px 10px;border-radius:2px;cursor:pointer;">â Upload Edited File</button>
                 <button type="button" id="useGeneratedBtn" style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);background:transparent;border:1px solid var(--mist);padding:3px 10px;border-radius:2px;cursor:pointer;margin-left:0.5rem;display:none;">Use Generated</button>
               </div>
             </div>
@@ -267,15 +267,15 @@
           </div>
           <div class="inscribe-fee">
             <span>Estimated inscription fee</span>
-            <span class="inscribe-fee-amount" id="inscribeFeeAmount">Calculating…</span>
+            <span class="inscribe-fee-amount" id="inscribeFeeAmount">Calculatingâ¦</span>
           </div>
           <button class="btn-inscribe" id="inscribeBtn" type="button">
-            <span>⛓ &nbsp; Inscribe on Bitcoin</span>
+            <span>â &nbsp; Inscribe on Bitcoin</span>
           </button>
           <div class="inscribe-success" id="inscribeSuccess">
-            <div class="inscribe-success-title">✓ Inscription order created</div>
+            <div class="inscribe-success-title">â Inscription order created</div>
             <div class="inscribe-success-txid" id="inscribeTxId"></div>
-            <a href="#" id="inscribeViewLink" target="_blank">View order & pay invoice →</a>
+            <a href="#" id="inscribeViewLink" target="_blank">View order & pay invoice â</a>
           </div>
         </div>
       </div>
@@ -330,7 +330,7 @@ promptInput.addEventListener('input',updatePromptPreview);
 fidelitySelect.addEventListener('change',updatePromptPreview);
 emphasisSelect.addEventListener('change',updatePromptPreview);
 function handleFiles(files){files.forEach(function(file){if(!file.type.startsWith('image/'))return;var reader=new FileReader();reader.onload=function(ev){var dataUrl=ev.target.result;var tmp=new Image();tmp.onload=function(){state.images.push({id:Date.now()+Math.random(),dataUrl:dataUrl,file:file,selected:false,naturalW:tmp.naturalWidth,naturalH:tmp.naturalHeight});renderImages();styleBuilder.style.display='block';analyzeBtn.disabled=false;updatePromptPreview();};tmp.onerror=function(){state.images.push({id:Date.now()+Math.random(),dataUrl:dataUrl,file:file,selected:false,naturalW:0,naturalH:0});renderImages();styleBuilder.style.display='block';analyzeBtn.disabled=false;};tmp.src=dataUrl;};reader.onerror=function(){showToast('Could not read file');};reader.readAsDataURL(file);});}
-function renderImages(){imagesGrid.innerHTML='';state.images.forEach(function(img){var wrap=document.createElement('div');wrap.className='thumb-wrap'+(img.selected?' selected':'');var dims=img.naturalW?img.naturalW+'×'+img.naturalH+'px':'';wrap.innerHTML='<img src="'+img.dataUrl+'" alt="artwork"><div class="thumb-meta"><span class="thumb-dims">'+dims+'</span>'+(img.selected?'<span class="thumb-sel">✓ selected</span>':'')+'</div><button class="thumb-remove" type="button" title="Remove">✕</button>';wrap.addEventListener('click',function(e){if(e.target.classList.contains('thumb-remove'))return;img.selected=!img.selected;renderImages();updatePromptPreview();});wrap.querySelector('.thumb-remove').addEventListener('click',function(e){e.stopPropagation();state.images=state.images.filter(function(i){return i.id!==img.id;});renderImages();if(!state.images.length){styleBuilder.style.display='none';analyzeBtn.disabled=true;}});imagesGrid.appendChild(wrap);});}
+function renderImages(){imagesGrid.innerHTML='';state.images.forEach(function(img){var wrap=document.createElement('div');wrap.className='thumb-wrap'+(img.selected?' selected':'');var dims=img.naturalW?img.naturalW+'Ã'+img.naturalH+'px':'';wrap.innerHTML='<img src="'+img.dataUrl+'" alt="artwork"><div class="thumb-meta"><span class="thumb-dims">'+dims+'</span>'+(img.selected?'<span class="thumb-sel">â selected</span>':'')+'</div><button class="thumb-remove" type="button" title="Remove">â</button>';wrap.addEventListener('click',function(e){if(e.target.classList.contains('thumb-remove'))return;img.selected=!img.selected;renderImages();updatePromptPreview();});wrap.querySelector('.thumb-remove').addEventListener('click',function(e){e.stopPropagation();state.images=state.images.filter(function(i){return i.id!==img.id;});renderImages();if(!state.images.length){styleBuilder.style.display='none';analyzeBtn.disabled=true;}});imagesGrid.appendChild(wrap);});}
 function getOutputSize(){var sel=state.images.filter(function(i){return i.selected;});var src=sel[0]||state.images[0];if(!src||!src.naturalW||!src.naturalH)return{str:'1024x1024',w:1024,h:1024};var ratio=src.naturalW/src.naturalH;if(ratio>=1.6)return{str:'1792x1024',w:1792,h:1024};if(ratio<=0.75)return{str:'1024x1792',w:1024,h:1792};return{str:'1024x1024',w:1024,h:1024};}
 analyzeBtn.addEventListener('click',async function(){
 var sel=state.images.filter(function(i){return i.selected;});
@@ -338,7 +338,7 @@ var src=sel[0]||state.images[0];
 if(!src){showToast('Upload an image first');return;}
 var apiKey=openaiKeyEl.value.trim();
 if(!apiKey){showToast('Enter your OpenAI API key first');openaiKeyEl.focus();return;}
-analyzeBtn.disabled=true;analyzeBtn.textContent='… Analysing';
+analyzeBtn.disabled=true;analyzeBtn.textContent='â¦ Analysing';
 styleDesc.style.display='none';styleTagsSection.style.display='none';
 try{
 var resp=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'gpt-4o',max_tokens:500,messages:[{role:'user',content:[{type:'image_url',image_url:{url:src.dataUrl}},{type:'text',text:'You are an expert art critic. Analyse the visual style of this artwork. Return ONLY valid JSON, no markdown: {"description":"3-5 sentence exhibition catalogue description of technique, palette, mood, and motifs","tags":["tag1","tag2","tag3","tag4","tag5","tag6"]}. Tags must be short style traits like: loose gestural brushwork, muted earth tones, chiaroscuro contrast, expressive linework, soft impasto.'}]}]})});
@@ -354,9 +354,9 @@ styleTagsEl.innerHTML='';
 (parsed.tags||[]).forEach(function(tag){var b=document.createElement('button');b.className='trait-tag active';b.textContent=tag;b.type='button';b.addEventListener('click',function(){b.classList.toggle('active');updatePromptPreview();});styleTagsEl.appendChild(b);});
 styleTagsSection.style.display='block';
 updatePromptPreview();
-showToast('Style analysed ✦');
-}catch(err){styleDesc.textContent='⚠ Analysis failed: '+err.message;styleDesc.style.display='block';console.error(err);}
-analyzeBtn.disabled=false;analyzeBtn.textContent='↺ Re-analyse Style';
+showToast('Style analysed â¦');
+}catch(err){styleDesc.textContent='â  Analysis failed: '+err.message;styleDesc.style.display='block';console.error(err);}
+analyzeBtn.disabled=false;analyzeBtn.textContent='âº Re-analyse Style';
 });
 generateBtn.addEventListener('click',generatePiece);
 document.getElementById('regenerateBtn').addEventListener('click',generatePiece);
@@ -368,7 +368,7 @@ noImagesWarn.style.display='none';errorMsg.classList.remove('visible');resultAct
 var size=getOutputSize();
 var prompt=buildPrompt();
 updatePromptPreview();
-outputCanvas.innerHTML='<div class="loading-overlay"><div class="loading-bar"></div><div class="loading-text">Generating at '+size.w+'×'+size.h+'px<br>Please wait 20–30 seconds…</div></div>';
+outputCanvas.innerHTML='<div class="loading-overlay"><div class="loading-bar"></div><div class="loading-text">Generating at '+size.w+'Ã'+size.h+'px<br>Please wait 20â30 secondsâ¦</div></div>';
 try{
 var resp=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'dall-e-3',prompt:prompt.slice(0,4000),n:1,size:size.str,response_format:'b64_json'})});
 if(!resp.ok){var e=await resp.json();throw new Error(e.error&&e.error.message?e.error.message:resp.status);}
@@ -380,12 +380,12 @@ var imgEl=document.createElement('img');imgEl.src=imgSrc;imgEl.alt='generated ar
 imgEl.style.cssText='width:100%;display:block;animation:fadeIn 0.6s ease;border-radius:2px 2px 0 0;';
 var wrapper=document.createElement('div');wrapper.style.width='100%';
 var meta=document.createElement('div');meta.style.cssText='padding:0.85rem 1.25rem;background:var(--cream);border:1px solid var(--mist);border-top:none;border-radius:0 0 2px 2px;';
-meta.innerHTML='<div style="font-family:\'Courier Prime\',monospace;font-size:0.55rem;color:var(--mist);letter-spacing:0.1em;">'+size.w+'×'+size.h+'px · DALL-E 3 · OpenAI</div>';
+meta.innerHTML='<div style="font-family:\'Courier Prime\',monospace;font-size:0.55rem;color:var(--mist);letter-spacing:0.1em;">'+size.w+'Ã'+size.h+'px Â· DALL-E 3 Â· OpenAI</div>';
 wrapper.appendChild(imgEl);wrapper.appendChild(meta);
 outputCanvas.innerHTML='';outputCanvas.appendChild(wrapper);
-resultActions.style.display='flex';showToast('New piece generated ✦');
+resultActions.style.display='flex';showToast('New piece generated â¦');
 }catch(err){
-outputCanvas.innerHTML='<div class="output-placeholder"><span class="big-char">◎</span><p>Generation failed — try again</p></div>';
+outputCanvas.innerHTML='<div class="output-placeholder"><span class="big-char">â</span><p>Generation failed â try again</p></div>';
 errorMsg.textContent='Error: '+err.message;errorMsg.classList.add('visible');console.error(err);
 }
 generateBtn.disabled=false;
@@ -418,14 +418,14 @@ inscribeImageDataUrl=ev.target.result;
 inscribeImagePreview.innerHTML='<img src="'+inscribeImageDataUrl+'" style="width:100%;height:100%;object-fit:cover;">';
 inscribeImageName.textContent=file.name;
 useGeneratedBtn.style.display='inline-block';
-showToast('Edited file ready for inscription ✦');
+showToast('Edited file ready for inscription â¦');
 };
 reader.readAsDataURL(file);
 });
 useGeneratedBtn.addEventListener('click',function(){
 inscribeImageDataUrl=null;
 if(state.generatedDataUrl){inscribeImagePreview.innerHTML='<img src="'+state.generatedDataUrl+'" style="width:100%;height:100%;object-fit:cover;">';}
-else{inscribeImagePreview.innerHTML='<span style="font-size:1.2rem;opacity:0.3;">◎</span>';}
+else{inscribeImagePreview.innerHTML='<span style="font-size:1.2rem;opacity:0.3;">â</span>';}
 inscribeImageName.textContent='Using generated image';
 useGeneratedBtn.style.display='none';
 showToast('Using generated image');
@@ -438,14 +438,14 @@ fetchFeeEstimate();
 });
 inscribeFeeSelect.addEventListener('change',fetchFeeEstimate);
 function getFeeRate(){var val=inscribeFeeSelect.value;if(val==='economy')return 5;if(val==='fast')return 25;return 12;}
-async function fetchFeeEstimate(){inscribeFeeAmount.textContent='Calculating…';try{var resp=await fetch('https://api.ordinalsbot.com/price?size=500000&fee='+getFeeRate());if(resp.ok){var data=await resp.json();if(data&&data.amount){inscribeFeeAmount.textContent=(data.amount/100000000).toFixed(6)+' BTC';}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}catch(e){inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}
+async function fetchFeeEstimate(){inscribeFeeAmount.textContent='Calculatingâ¦';try{var resp=await fetch('https://api.ordinalsbot.com/price?size=500000&fee='+getFeeRate());if(resp.ok){var data=await resp.json();if(data&&data.amount){inscribeFeeAmount.textContent=(data.amount/100000000).toFixed(6)+' BTC';}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}catch(e){inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}
 inscribeBtn.addEventListener('click',async function(){
 var imageToInscribe=inscribeImageDataUrl||state.generatedDataUrl;
 if(!imageToInscribe){showToast('Generate or upload an image first');return;}
 var wallet=inscribeWallet.value.trim();
 if(!wallet){showToast('Enter your Bitcoin receive address');inscribeWallet.focus();return;}
 if(!wallet.startsWith('bc1')){showToast('Enter a valid Bitcoin address starting with bc1');return;}
-inscribeBtn.disabled=true;inscribeBtn.querySelector('span').textContent='⛓  Preparing inscription…';
+inscribeBtn.disabled=true;inscribeBtn.querySelector('span').textContent='â  Preparing inscriptionâ¦';
 inscribeSuccess.classList.remove('visible');
 try{
 var base64Data=imageToInscribe.split(',')[1];
@@ -458,7 +458,7 @@ formData.append('files',blob,title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.pn
 formData.append('receiveAddress',wallet);
 formData.append('fee',getFeeRate());
 formData.append('lowPostage','true');
-var resp=await fetch('https://api.ordinalsbot.com/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files:[{size:byteArr.length,type:'image/jpeg',name:title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.jpg',dataURL:imageToInscribe}],receiveAddress:wallet,fee:getFeeRate(),lowPostage:true})});
+var resp=await fetch('https://api.ordinalsbot.com/inscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({files:[{size:byteArr.length,type:'image/jpeg',name:title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.jpg',dataURL:imageToInscribe}],receiveAddress:wallet,fee:getFeeRate(),lowPostage:true})});
 if(!resp.ok){var e=await resp.json();throw new Error(e.error||'Inscription failed '+resp.status);}
 var data=await resp.json();
 var orderId=data.id||data.orderId||'';
@@ -466,10 +466,10 @@ var payAddress=data.paymentAddress||(data.charge&&data.charge.address)||'';
 inscribeSuccess.classList.add('visible');
 inscribeTxId.textContent='Order ID: '+orderId+(payAddress?'\nPay to: '+payAddress:'');
 inscribeViewLink.href='https://ordinalsbot.com/order/'+orderId;
-inscribeViewLink.textContent='View order & pay invoice →';
-showToast('Inscription order created ✦');
+inscribeViewLink.textContent='View order & pay invoice â';
+showToast('Inscription order created â¦');
 }catch(err){showToast('Error: '+err.message);console.error(err);}
-inscribeBtn.disabled=false;inscribeBtn.querySelector('span').textContent='⛓  Inscribe on Bitcoin';
+inscribeBtn.disabled=false;inscribeBtn.querySelector('span').textContent='â  Inscribe on Bitcoin';
 });
 </script>
 </body>
