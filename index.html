@@ -438,7 +438,7 @@ fetchFeeEstimate();
 });
 inscribeFeeSelect.addEventListener('change',fetchFeeEstimate);
 function getFeeRate(){var val=inscribeFeeSelect.value;if(val==='economy')return 5;if(val==='fast')return 25;return 12;}
-async function fetchFeeEstimate(){inscribeFeeAmount.textContent='Calculating…';try{var resp=await fetch('https://ordinalsbot.com/api/iscriptionprice?size=500000&fee='+getFeeRate());if(resp.ok){var data=await resp.json();if(data&&data.amount){inscribeFeeAmount.textContent=(data.amount/100000000).toFixed(6)+' BTC';}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}catch(e){inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}
+async function fetchFeeEstimate(){inscribeFeeAmount.textContent='Calculating…';try{var resp=await fetch('https://api.ordinalsbot.com/price?size=500000&fee='+getFeeRate());if(resp.ok){var data=await resp.json();if(data&&data.amount){inscribeFeeAmount.textContent=(data.amount/100000000).toFixed(6)+' BTC';}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}else{inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}catch(e){inscribeFeeAmount.textContent='~0.00015 BTC (est.)';}}
 inscribeBtn.addEventListener('click',async function(){
 var imageToInscribe=inscribeImageDataUrl||state.generatedDataUrl;
 if(!imageToInscribe){showToast('Generate or upload an image first');return;}
