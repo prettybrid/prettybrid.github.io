@@ -29,7 +29,7 @@ class H(http.server.BaseHTTPRequestHandler):
         if not self.ok(): return
         p=urlparse(self.path).path
         if p=='/status':
-            r=subprocess.run(['bitcoin-cli','getblockcount'],capture_output=True,text=True,timeout=5)
+            r=subprocess.run(['/Users/prettybrid/bin/bitcoin-cli','getblockcount'],capture_output=True,text=True,timeout=5)
             self.json({'status':'ok','blocks':r.stdout.strip()})
         elif p=='/balance':
             r=subprocess.run([ORD_PATH,'--bitcoin-rpc-url',BTC_RPC_URL,'wallet','--no-sync','balance'],capture_output=True,text=True,timeout=10)
