@@ -168,17 +168,44 @@ footer{border-top:1px solid var(--charcoal);padding:3rem;display:flex;align-item
 </div>
 
 <div class="mbg" id="mod">
-  <div class="mb">
-    <div class="mt">Acquire this piece</div>
-    <div class="mn" id="mnt"></div>
-    <div class="mo">
-      <div class="mop" id="ob"><div class="mot" style="color:var(--btc)">Purchase with Bitcoin</div><div class="mod">Pay directly in Bitcoin. You will receive the Ordinal inscription in your wallet.</div></div>
-      <div class="mop" id="oe"><div class="mot">Enquire via Email</div><div class="mod">Contact studio@prettybrid.com to discuss acquisition and payment options.</div></div>
+<div class="mb" style="max-width:540px;width:100%;max-height:90vh;overflow-y:auto;">
+  <div class="mt">Acquire this piece</div>
+  <div class="mn" id="mnt"></div>
+  <div id="pay-form">
+    <div style="margin-bottom:1rem;">
+      <div style="font-family:'Courier Prime',monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);margin-bottom:0.2rem;">Collection &middot; Edition</div>
+      <div style="font-family:'Courier Prime',monospace;font-size:0.58rem;color:var(--paper);"><span id="pay-collection"></span> &middot; <span id="pay-edition"></span></div>
+      <div style="font-family:'Courier Prime',monospace;font-size:0.52rem;color:var(--mist);margin-top:0.2rem;">Inscription: <span id="pay-inscr" style="color:var(--gold);"></span></div>
     </div>
-    <button class="mc" id="cls">Close</button>
+    <div style="display:flex;gap:1.25rem;align-items:flex-start;margin-bottom:1.25rem;">
+      <img id="pay-qr" src="" alt="BTC QR" style="width:130px;height:130px;border:1px solid var(--charcoal);border-radius:2px;flex-shrink:0;background:white;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Courier Prime',monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);margin-bottom:0.4rem;">Send payment to</div>
+        <div id="pay-address" onclick="navigator.clipboard.writeText(this.textContent).then(function(){showToast('Address copied!')})" style="font-family:'Courier Prime',monospace;font-size:0.48rem;color:var(--gold);word-break:break-all;line-height:1.6;background:rgba(0,0,0,0.4);padding:0.5rem;border-radius:2px;cursor:pointer;"></div>
+        <div style="font-family:'Courier Prime',monospace;font-size:0.48rem;color:var(--mist);margin-top:0.3rem;">Tap to copy &middot; Amount: <span id="pay-price" style="color:var(--gold);font-weight:700;"></span></div>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <div style="font-family:'Courier Prime',monospace;font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mist);margin-bottom:0.4rem;">Your Bitcoin receive address</div>
+      <input id="pay-collector-addr" type="text" placeholder="bc1p... your Xverse or Ordinals wallet address" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--charcoal);border-radius:2px;padding:0.6rem 0.75rem;font-family:'Courier Prime',monospace;font-size:0.55rem;color:var(--paper);outline:none;box-sizing:border-box;">
+      <div style="font-family:'Courier Prime',monospace;font-size:0.48rem;color:var(--mist);margin-top:0.3rem;">Your inscription will be sent here once payment confirms</div>
+    </div>
+    <button id="ob" style="width:100%;font-family:'Courier Prime',monospace;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;padding:0.85rem;background:var(--gold);color:var(--ink);border:none;cursor:pointer;border-radius:2px;margin-bottom:0.75rem;">Confirm Acquisition</button>
+    <div style="font-family:'Courier Prime',monospace;font-size:0.48rem;color:var(--mist);text-align:center;line-height:1.6;">Payment checked automatically every 5 minutes.<br>Inscription transfers to your wallet within 30 minutes of confirmation.</div>
+    <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--charcoal);">
+      <div class="mop" id="oe" style="padding:0.75rem;"><div class="mot" style="font-size:0.55rem;">Enquire via Email</div><div class="mod" style="font-size:0.78rem;">Questions? Contact studio@prettybrid.com</div></div>
+    </div>
   </div>
+  <div id="pay-success" style="display:none;text-align:center;padding:2rem 1rem;">
+    <div style="font-size:2rem;color:var(--gold);margin-bottom:1rem;">&#10003;</div>
+    <div style="font-family:'Courier Prime',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;">Acquisition Confirmed</div>
+    <div id="pay-success-title" style="font-size:1.4rem;font-style:italic;color:var(--paper);margin-bottom:0.5rem;"></div>
+    <div id="pay-order-id" style="font-family:'Courier Prime',monospace;font-size:0.5rem;color:var(--mist);margin-bottom:1.25rem;word-break:break-all;"></div>
+    <div style="font-family:'Courier Prime',monospace;font-size:0.55rem;color:var(--mist);line-height:1.9;">Your inscription will arrive automatically<br>within 30 minutes of payment confirmation.<br><br>Questions? <a href="mailto:studio@prettybrid.com" style="color:var(--gold);">studio@prettybrid.com</a></div>
+  </div>
+  <button class="mc" id="cls" style="margin-top:1rem;">Close</button>
 </div>
-
+</div>
 <div class="tst" id="tst"></div>
 
 
