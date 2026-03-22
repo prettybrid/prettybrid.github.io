@@ -33,6 +33,20 @@ export default{
           transferredAt:null
         };
         await env.ORDERS.put(orderId,JSON.stringify(order));
+        // Send email notification via Web3Forms (free service)
+        try{
+          await fetch("https://api.web3forms.com/submit",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+              access_key:env.WEB3FORMS_KEY,
+              subject:"New Prettybrid Acquisition: "+order.pieceTitle,
+              from_name:"Prettybrid Sales",
+              to:"studio@prettybrid.com",
+              message:"New acquisition request!\n\nPiece: "+order.pieceTitle+"\nCollection: "+order.collection+"\nEdition: "+order.edition+"\nPrice: "+order.price+"\nOrder ID: "+orderId+"\n\nCollector address: "+order.collectorAddress+"\n\nPayment address: "+order.paymentAddress+"\n\nStatus: Awaiting payment"
+            })
+          });
+        }catch(emailErr){console.error("Email notification failed:",emailErr);}
         return new Response(JSON.stringify({success:true,orderId,paymentAddress:order.paymentAddress,price:order.price}),{headers:CORS});
       }catch(e){return new Response(JSON.stringify({error:e.message}),{status:500,headers:CORS});}
     }
