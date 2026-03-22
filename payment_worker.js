@@ -39,7 +39,7 @@ export default{
             method:"POST",
             headers:{"Content-Type":"application/json","Authorization":"Bearer "+env.RESEND_KEY},
             body:JSON.stringify({
-              from:"Prettybrid Sales <onboarding@resend.dev>",
+              from:"Prettybrid Sales <studio@prettybrid.com>",
               to:["studio@prettybrid.com"],
               subject:"New Acquisition: "+order.pieceTitle,
               text:"New acquisition request!\n\nPiece: "+order.pieceTitle+"\nCollection: "+order.collection+"\nEdition: "+order.edition+"\nPrice: "+order.price+"\nOrder ID: "+orderId+"\n\nCollector Bitcoin address: "+order.collectorAddress+"\n\nYour receive address: "+order.paymentAddress+"\n\nStatus: Awaiting payment\n\nThe inscription will transfer automatically once payment confirms."
