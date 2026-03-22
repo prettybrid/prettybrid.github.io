@@ -35,15 +35,14 @@ export default{
         await env.ORDERS.put(orderId,JSON.stringify(order));
         // Send email notification via Web3Forms (free service)
         try{
-          await fetch("https://api.web3forms.com/submit",{
+          await fetch("https://api.resend.com/emails",{
             method:"POST",
-            headers:{"Content-Type":"application/json"},
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+env.RESEND_KEY},
             body:JSON.stringify({
-              access_key:env.WEB3FORMS_KEY,
-              subject:"New Prettybrid Acquisition: "+order.pieceTitle,
-              from_name:"Prettybrid Sales",
-              to:"studio@prettybrid.com",
-              message:"New acquisition request!\n\nPiece: "+order.pieceTitle+"\nCollection: "+order.collection+"\nEdition: "+order.edition+"\nPrice: "+order.price+"\nOrder ID: "+orderId+"\n\nCollector address: "+order.collectorAddress+"\n\nPayment address: "+order.paymentAddress+"\n\nStatus: Awaiting payment"
+              from:"Prettybrid Sales <onboarding@resend.dev>",
+              to:["studio@prettybrid.com"],
+              subject:"New Acquisition: "+order.pieceTitle,
+              text:"New acquisition request!\n\nPiece: "+order.pieceTitle+"\nCollection: "+order.collection+"\nEdition: "+order.edition+"\nPrice: "+order.price+"\nOrder ID: "+orderId+"\n\nCollector Bitcoin address: "+order.collectorAddress+"\n\nYour receive address: "+order.paymentAddress+"\n\nStatus: Awaiting payment\n\nThe inscription will transfer automatically once payment confirms."
             })
           });
         }catch(emailErr){console.error("Email notification failed:",emailErr);}
