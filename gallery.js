@@ -21,10 +21,21 @@ function showToast(m){
 
 function openModal(i){
   cur=i;
-  document.getElementById("mnt").textContent=pieces[i].title;
+  var p=pieces[i];
+  var btcAddr="bc1pqfj7tzlc58k48ha9gkhu4qszwqxckatu9f7ue2amzutjqhgc7uyq7hq8we";
+  document.getElementById("mnt").textContent=p.title;
+  document.getElementById("pay-collection").textContent=p.coll||"Altered States of Reality";
+  document.getElementById("pay-edition").textContent=p.ed||"1 of 10";
+  document.getElementById("pay-price").textContent=p.price||"0.02 BTC";
+  document.getElementById("pay-inscr").textContent=p.inscr?p.inscr.slice(0,20)+"...":"Pending confirmation";
+  document.getElementById("pay-address").textContent=btcAddr;
+  var amt=(p.price||"0.02 BTC").replace(" BTC","");
+  document.getElementById("pay-qr").src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=bitcoin:"+btcAddr+"?amount="+amt+"&label="+encodeURIComponent(p.title);
+  document.getElementById("pay-collector-addr").value="";
+  document.getElementById("pay-success").style.display="none";
+  document.getElementById("pay-form").style.display="block";
   document.getElementById("mod").classList.add("open");
 }
-
 function closeModal(){document.getElementById("mod").classList.remove("open");}
 
 function setView(v){
