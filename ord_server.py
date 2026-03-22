@@ -37,9 +37,11 @@ class H(http.server.BaseHTTPRequestHandler):
         else: self.json({'error':'Not found'},404)
     def do_POST(self):
         if not self.ok(): return
-        if urlparse(self.path).path=='/inscribe':
+        path=urlparse(self.path).path
+        body=json.loads(self.rfile.read(int(self.headers.get('Content-Length',0))))
+
+        if path=='/inscribe':
             try:
-                body=json.loads(self.rfile.read(int(self.headers.get('Content-Length',0))))
                 img=body.get('imageDataUrl','');addr=body.get('receiveAddress','');fee=body.get('feeRate',2);title=body.get('title','untitled')
                 if not img or not addr: self.json({'error':'Missing fields'},400);return
                 h,enc=img.split(',',1)
@@ -52,6 +54,24 @@ class H(http.server.BaseHTTPRequestHandler):
                     out=json.loads(r.stdout);self.json({'status':'ok','inscriptionId':out.get('inscription',''),'reveal':out.get('reveal',''),'commit':out.get('commit','')})
                 else: self.json({'error':r.stderr or 'Failed'},500)
             except Exception as e: self.json({'error':str(e)},500)
+
+        elif path=='/transfer':
+            try:
+                inscription_id=body.get('inscriptionId','')
+                to_address=body.get('toAddress','')
+                fee=body.get('feeRate',5)
+                if not inscription_id or not to_address: self.json({'error':'Missing inscriptionId or toAddress'},400);return
+                print(f"[Prettybrid] Transferring {inscription_id} to {to_address} at {fee} sat/vB")
+                r=subprocess.run([ORD_PATH,'--bitcoin-rpc-url',BTC_RPC_URL,'wallet','send','--fee-rate',str(fee),to_address,inscription_id],capture_output=True,text=True,timeout=120)
+                if r.returncode==0:
+                    out=r.stdout.strip()
+                    print(f"[Prettybrid] Transfer TX: {out}")
+                    self.json({'status':'ok','txid':out})
+                else:
+                    print(f"[Prettybrid] Transfer failed: {r.stderr}")
+                    self.json({'error':r.stderr or 'Transfer failed'},500)
+            except Exception as e: self.json({'error':str(e)},500)
+
         else: self.json({'error':'Not found'},404)
 
 print("Prettybrid ord server (Cloudflare-secured) running on port 7777...")
