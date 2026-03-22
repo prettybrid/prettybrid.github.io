@@ -138,7 +138,42 @@ function init(){
   document.getElementById("f2").addEventListener("click",function(){scrollTo("about");});
   document.getElementById("f3").addEventListener("click",function(){sendEmail("");});
   document.getElementById("cls").addEventListener("click",closeModal);
-  document.getElementById("ob").addEventListener("click",function(){var ca=document.getElementById("pay-collector-addr").value.trim();var pc=pieces[cur];if(!ca){showToast("Please enter your Bitcoin wallet address");document.getElementById("pay-collector-addr").focus();return;}if(!ca.startsWith("bc1")){showToast("Enter a valid Bitcoin address starting with bc1");return;}var subj="New Acquisition: "+pc.title;var body="Acquisition request for "+pc.title+"%0A%0ACollection: "+pc.coll+"%0APrice: "+pc.price+"%0AInscription: "+(pc.inscr||"pending")+"%0A%0ACollector address: "+ca+"%0A%0ASend inscription to collector once payment confirmed to:%0Abc1pqfj7tzlc58k48ha9gkhu4qszwqxckatu9f7ue2amzutjqhgc7uyq7hq8we";window.open("mailto:studio@prettybrid.com?subject="+encodeURIComponent(subj)+"&body="+body);document.getElementById("pay-form").style.display="none";document.getElementById("pay-success").style.display="block";document.getElementById("pay-success-title").textContent=pc.title;});
+  document.getElementById("ob").addEventListener("click",async function(){
+  var ca=document.getElementById("pay-collector-addr").value.trim();
+  var pc=pieces[cur];
+  if(!ca){showToast("Please enter your Bitcoin wallet address");document.getElementById("pay-collector-addr").focus();return;}
+  if(!ca.startsWith("bc1")){showToast("Enter a valid Bitcoin address starting with bc1");return;}
+  if(!pc.inscr){showToast("Inscription pending — check back soon");return;}
+  document.getElementById("ob").textContent="Processing...";
+  document.getElementById("ob").disabled=true;
+  try{
+    var resp=await fetch("https://prettybrid-inscription.deletemyinformation8.workers.dev/order",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        pieceTitle:pc.title,
+        collection:pc.coll,
+        edition:pc.ed,
+        price:pc.price,
+        inscriptionId:pc.inscr,
+        collectorAddress:ca
+      })
+    });
+    var data=await resp.json();
+    if(data.orderId){
+      document.getElementById("pay-form").style.display="none";
+      document.getElementById("pay-success").style.display="block";
+      document.getElementById("pay-success-title").textContent=pc.title;
+      document.getElementById("pay-order-id").textContent="Order ID: "+data.orderId;
+    }else{
+      showToast("Error: "+(data.error||"Please try again"));
+    }
+  }catch(e){
+    showToast("Error: "+e.message);
+  }
+  document.getElementById("ob").textContent="Confirm Acquisition Request";
+  document.getElementById("ob").disabled=false;
+});
   document.getElementById("oe").addEventListener("click",function(){if(cur!==null)sendEmail("Enquiry: "+pieces[cur].title);closeModal();});
   document.getElementById("apb").addEventListener("click",function(){var p=document.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";});
   document.getElementById("cnb").addEventListener("click",function(){document.getElementById("adp").style.display="none";});
