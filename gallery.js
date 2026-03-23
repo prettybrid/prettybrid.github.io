@@ -89,7 +89,7 @@ function render(){
   } else {
     for(i=0;i<pieces.length;i++){
       p=pieces[i];
-      bi=p.inscr?"<span class='pdt'>Inscription <strong>#"+p.inscr.slice(0,8)+"</strong></span>":"<span class='pdt' style='color:var(--gold)'>Inscription pending</span>";
+      bi=(p.inscr&&p.inscr!=='Inscription pending')?"<span class='pdt'>Inscription <strong>#"+p.inscr.slice(0,8)+"</strong></span>":"<span class='pdt' style='color:var(--gold)'>Inscription pending</span>";
       di=p.desc?"<p style='font-style:italic;font-size:0.95rem;color:var(--mist);line-height:1.7;margin-bottom:0.75rem'>"+p.desc+"</p>":"";
       del=adminMode?"<button class='bdel' data-idx='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 1rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;margin-top:0.5rem;'>Remove Piece</button>":"";
       h+="<div class='piece'><div class='piw'><img src='"+p.img+"' alt='"+p.title+"' loading='lazy'><div class='pio'></div></div>";
