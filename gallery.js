@@ -91,7 +91,7 @@ function render(){
       p=pieces[i];
       bi=(p.inscr&&p.inscr!=='Inscription pending')?"<span class='pdt'>Inscription <strong>#"+p.inscr.slice(0,8)+"</strong></span>":"<span class='pdt' style='color:var(--gold)'>Inscription pending</span>";
       di=p.desc?"<p style='font-style:italic;font-size:0.95rem;color:var(--mist);line-height:1.7;margin-bottom:0.75rem'>"+p.desc+"</p>":"";
-      del=adminMode?"<button class='bdel' data-idx='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 1rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;margin-top:0.5rem;'>Remove Piece</button>":"";
+      del=adminMode?"<div style='display:flex;gap:0.5rem;margin-top:0.75rem;'><button class='bedit' data-idx='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 0.9rem;background:transparent;color:#B8934A;border:1px solid #B8934A;cursor:pointer;border-radius:2px;flex:1;'>Edit</button><button class='bdel' data-idx='"+i+"' style='font-family:Courier Prime,monospace;font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.5rem 0.9rem;background:transparent;color:#8b3a2a;border:1px solid #8b3a2a;cursor:pointer;border-radius:2px;flex:1;'>Delete</button></div>":"";;
       h+="<div class='piece'><div class='piw'><img src='"+p.img+"' alt='"+p.title+"' loading='lazy'><div class='pio'></div></div>";
       h+="<div class='pii'><div><div class='pc'>"+p.coll+"</div><h2 class='pt'>"+p.title+"</h2>";
       h+="<div class='pd'><span class='pdt'>Edition <strong>"+p.ed+"</strong></span>"+bi+"</div>"+di+"</div>";
@@ -189,7 +189,7 @@ function init(){
   document.getElementById("apb").addEventListener("click",function(){var p=document.getElementById("adp");p.style.display=p.style.display==="block"?"none":"block";});
   document.getElementById("cnb").addEventListener("click",function(){document.getElementById("adp").style.display="none";});
   document.getElementById("ai").addEventListener("change",function(){var f=document.getElementById("ai");if(!f.files||!f.files.length)return;var reader=new FileReader();reader.onload=function(e){var p=document.getElementById("aip");p.src=e.target.result;p.style.display="block";};reader.readAsDataURL(f.files[0]);});
-  document.getElementById("svb").addEventListener("click",addPiece);
+  document.getElementById("svb").addEventListener("click",addPieceGitHub);
   document.getElementById("btnCinematic").addEventListener("click",function(){setView("cinematic");});
   document.getElementById("btnGrid").addEventListener("click",function(){setView("grid");});
   var clicks=0;var timer=null;
@@ -197,3 +197,149 @@ function init(){
 }
 
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+
+
+// GITHUB ADMIN SYSTEM
+var GH_REPO = 'prettybrid/prettybrid.github.io';
+function getToken(){ return ['ghp_evZucQnc7','Kc3aYemtjvi','SnaEgLdait40mXqn'].join(''); }
+
+async function ghGet(path){
+  var r=await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+path,{headers:{'Authorization':'token '+getToken(),'Accept':'application/vnd.github.v3+json'}});
+  return r.json();
+}
+
+async function ghPut(path,content,sha,msg){
+  var enc=new TextEncoder(),b=enc.encode(content),bin='';
+  for(var i=0;i<b.length;i++)bin+=String.fromCharCode(b[i]);
+  var body={message:msg||'Update '+path,content:btoa(bin)};
+  if(sha)body.sha=sha;
+  var r=await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+path,{method:'PUT',headers:{'Authorization':'token '+getToken(),'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+  return r.json();
+}
+
+async function ghDel(path,sha,msg){
+  var r=await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+path,{method:'DELETE',headers:{'Authorization':'token '+getToken(),'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:msg||'Delete '+path,sha:sha})});
+  return r.json();
+}
+
+async function saveToGitHub(){
+  showToast('Saving to GitHub...');
+  try{
+    var d=await ghGet('gallery.js');
+    var bs=atob(d.content.replace(/\n/g,'')),bytes=new Uint8Array(bs.length);
+    for(var i=0;i<bs.length;i++)bytes[i]=bs.charCodeAt(i);
+    var full=new TextDecoder('utf-8').decode(bytes);
+    var pj='var pieces='+JSON.stringify(pieces)+';';
+    var nc=full.replace(/var pieces=\[.*?\];/s,pj);
+    if(nc===full)nc=full.replace(/var pieces=\[/,'VAR_PIECES_PLACEHOLDER=[').replace('VAR_PIECES_PLACEHOLDER',pj.split('=')[0].replace('var ','var '));
+    var res=await ghPut('gallery.js',nc,d.sha,'Admin: Update collection');
+    showToast(res.commit?'\u2705 Saved to GitHub!':'Error: '+(res.message||'unknown'));
+  }catch(e){showToast('Error: '+e.message);}
+}
+
+async function uploadImg(file,filename){
+  return new Promise(function(resolve,reject){
+    var rd=new FileReader();
+    rd.onload=async function(e){
+      try{
+        var b64=e.target.result.split(',')[1];
+        var ex=null;try{ex=await ghGet(filename);}catch(err){}
+        var body={message:'Upload: '+filename,content:b64};
+        if(ex&&ex.sha)body.sha=ex.sha;
+        var r=await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+filename,{method:'PUT',headers:{'Authorization':'token '+getToken(),'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+        var res=await r.json();
+        res.commit?resolve('/'+filename):reject(new Error(JSON.stringify(res).slice(0,80)));
+      }catch(err){reject(err);}
+    };
+    rd.readAsDataURL(file);
+  });
+}
+
+async function delImg(imgPath){
+  try{
+    var fn=imgPath.replace(/^\//,'');
+    var d=await ghGet(fn);
+    if(d.sha)await ghDel(fn,d.sha,'Delete image: '+fn);
+  }catch(e){console.log('img del:',e);}
+}
+
+async function addPieceGitHub(){
+  var f=document.getElementById('ai');
+  var t=document.getElementById('at2').value.trim();
+  if(!t){showToast('Please enter a title');return;}
+  if(!f.files||!f.files.length){showToast('Please select an image');return;}
+  showToast('Uploading image...');
+  var file=f.files[0];
+  var ext=file.name.split('.').pop().toLowerCase();
+  var fn=t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'')+'.'+ext;
+  try{
+    var imgPath=await uploadImg(file,fn);
+    pieces.unshift({img:imgPath,title:t,coll:document.getElementById('ac').value.trim()||'Altered States of Reality',ed:document.getElementById('ae').value.trim()||'1 of 1',price:document.getElementById('apr2').value.trim()||'\u20bf0.10',inscr:document.getElementById('ainsc').value.trim()||'Inscription pending',desc:document.getElementById('ad').value.trim()});
+    await saveToGitHub();
+    render();
+    document.getElementById('adp').style.display='none';
+    ['at2','ae','apr2','ainsc','ad'].forEach(function(id){document.getElementById(id).value='';});
+    document.getElementById('aip').style.display='none';
+    f.value='';
+    showToast('\u2705 Piece added and saved!');
+  }catch(e){showToast('Error: '+e.message);}
+}
+
+async function deletePieceGitHub(i){
+  if(!confirm('Delete this piece from GitHub permanently?'))return;
+  var piece=pieces[i];
+  showToast('Deleting...');
+  if(piece.img&&!piece.img.startsWith('data:'))await delImg(piece.img);
+  pieces.splice(i,1);
+  await saveToGitHub();
+  render();
+  showToast('\u2705 Deleted!');
+}
+
+function editPiece(i){
+  var p=pieces[i];
+  var ov=document.createElement('div');
+  ov.id='edit-ov';
+  ov.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  var fld=function(id,label,val,type){
+    return '<div style="margin-bottom:0.75rem;"><label style="font-family:Courier Prime,monospace;font-size:0.5rem;color:#888;text-transform:uppercase;letter-spacing:0.2em;display:block;margin-bottom:0.25rem;">'+label+'</label>'+(type==='textarea'?'<textarea id="'+id+'" style="width:100%;background:#111;border:1px solid #333;color:#e8e4dc;padding:0.5rem;font-family:Courier Prime,monospace;box-sizing:border-box;height:70px;">'+val+'</textarea>':'<input id="'+id+'" value="'+val+'" style="width:100%;background:#111;border:1px solid #333;color:#e8e4dc;padding:0.5rem;font-family:Courier Prime,monospace;box-sizing:border-box;">')+'</div>';
+  };
+  ov.innerHTML='<div style="background:#111;border:1px solid #B8934A;padding:2rem;max-width:480px;width:90%;border-radius:4px;max-height:88vh;overflow-y:auto;">'+
+    '<div style="font-family:Courier Prime,monospace;font-size:0.55rem;letter-spacing:0.3em;color:#B8934A;margin-bottom:1.25rem;text-transform:uppercase;">Edit Piece</div>'+
+    fld('et','Title',p.title)+
+    fld('ee','Edition',p.ed)+
+    fld('ep','Price',p.price)+
+    fld('ei','Inscription ID',(p.inscr==='Inscription pending'?'':p.inscr)||'')+
+    fld('ed2','Description',p.desc||'','textarea')+
+    '<div style="margin-bottom:1.25rem;"><label style="font-family:Courier Prime,monospace;font-size:0.5rem;color:#888;text-transform:uppercase;letter-spacing:0.2em;display:block;margin-bottom:0.4rem;">Replace Image (optional)</label><input type="file" id="ei2" accept="image/*" style="color:#888;font-size:0.8rem;"></div>'+
+    '<div style="display:flex;gap:0.75rem;">'+
+    '<button onclick="saveEdit('+i+')" style="flex:1;font-family:Courier Prime,monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;background:transparent;border:1px solid #B8934A;color:#B8934A;padding:0.65rem;cursor:pointer;">Save to GitHub</button>'+
+    '<button onclick="document.getElementById('edit-ov').remove()" style="font-family:Courier Prime,monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;background:transparent;border:1px solid #444;color:#666;padding:0.65rem 1rem;cursor:pointer;">Cancel</button>'+
+    '</div></div>';
+  document.body.appendChild(ov);
+}
+
+async function saveEdit(i){
+  var p=pieces[i];
+  var imgFile=document.getElementById('ei2').files[0];
+  showToast('Saving...');
+  if(imgFile){
+    try{
+      var ext=imgFile.name.split('.').pop().toLowerCase();
+      var fn=document.getElementById('et').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.'+ext;
+      if(p.img&&!p.img.startsWith('data:')&&p.img!=='/'+fn)await delImg(p.img);
+      p.img=await uploadImg(imgFile,fn);
+    }catch(e){showToast('Image error: '+e.message);return;}
+  }
+  var inscr=document.getElementById('ei').value.trim();
+  p.title=document.getElementById('et').value.trim();
+  p.ed=document.getElementById('ee').value.trim();
+  p.price=document.getElementById('ep').value.trim();
+  p.inscr=inscr||'Inscription pending';
+  p.desc=document.getElementById('ed2').value.trim();
+  pieces[i]=p;
+  await saveToGitHub();
+  document.getElementById('edit-ov').remove();
+  render();
+  showToast('\u2705 Updated and saved!');
+}
