@@ -65,7 +65,7 @@ function makeGridHandler(i){
 
 function render(){
   var c=document.getElementById("gp");
-  if(!pieces.length){
+  if(!sorted.length){
     c.innerHTML="<div style='text-align:center;padding:6rem 3rem'><div style='font-size:1.5rem;font-style:italic;color:var(--mist)'>The collection is being assembled</div></div>";
     return;
   }
