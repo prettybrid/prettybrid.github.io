@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sovereign Art — A Methodology for Bitcoin Ordinal Inscription by Beth Parin</title>
+  <meta name="description" content="Sovereign Art: A Methodology for Bitcoin Ordinal Inscription — a practical guide for artists with no technical background, by Beth Parin / Prettybrid.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://prettybrid.com/sovereign-art">
+  <meta property="og:title" content="Sovereign Art — Beth Parin">
+  <meta property="og:description" content="A practical guide for artists with no technical background who want to inscribe their work permanently on the Bitcoin blockchain.">
+  <meta property="og:url" content="https://prettybrid.com/sovereign-art">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://prettybrid.com/the_desert_speaks_back.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sovereign Art — Beth Parin">
+  <meta name="twitter:image" content="https://prettybrid.com/the_desert_speaks_back.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0d0d0b;
+      --paper: #f5f0e8;
+      --cream: #ede8db;
+      --gold: #b8934a;
+      --charcoal: #2a2a26;
+      --mist: #c8c2b4;
+      --sage: #5a6b52;
+    }
+    body {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(13,13,11,0.98), rgba(13,13,11,0.7));
+    }
+    .nw {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nl-wrap { display: flex; gap: 2rem; align-items: center; }
+    .nl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+    }
+    .nl:hover { color: var(--gold); }
+    .nl-btn {
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+    }
+    .nl-btn:hover { background: var(--gold); color: var(--ink); }
+
+    /* Hero */
+    .hero {
+      padding: 10rem 3rem 5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .hero-text .lbl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+    .hero-text h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.1;
+      color: var(--paper);
+      margin-bottom: 0.5rem;
+    }
+    .hero-text h1 em { font-style: normal; color: var(--gold); }
+    .hero-text .subtitle {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--mist);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .hero-text .author {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 2rem;
+    }
+    .hero-text .author span { color: var(--gold); }
+    .btn-primary {
+      display: inline-block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+      margin-right: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .btn-primary:hover { background: var(--paper); }
+    .btn-secondary {
+      display: inline-block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-bottom: 0.75rem;
+    }
+    .btn-secondary:hover { background: var(--gold); color: var(--ink); }
+    .hero-cover {
+      position: relative;
+    }
+    .hero-cover img {
+      width: 100%;
+      border-radius: 2px;
+      display: block;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+    .cover-placeholder {
+      aspect-ratio: 0.7;
+      background: var(--charcoal);
+      border: 1px solid #3a3a36;
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem;
+      text-align: center;
+    }
+    .cover-placeholder .cp-title {
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--paper);
+      line-height: 1.2;
+    }
+    .cover-placeholder .cp-title em { font-style: normal; color: var(--gold); }
+    .cover-placeholder .cp-sub {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+    }
+    .cover-placeholder .cp-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+    .cover-placeholder .cp-author {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* Divider */
+    .divider {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      border-top: 1px solid var(--charcoal);
+    }
+
+    /* About the book */
+    .about {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+    .section-lbl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-lbl::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #c8c2b4;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .contents-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .contents-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #2a2a26;
+    }
+    .ci-num {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.52rem;
+      color: var(--gold);
+      min-width: 20px;
+    }
+    .ci-title {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--paper);
+      flex: 1;
+    }
+    .ci-pg {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.5rem;
+      color: var(--mist);
+    }
+
+    /* Inscription record */
+    .inscription {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      border-top: 1px solid var(--charcoal);
+    }
+    .inscription-card {
+      background: var(--charcoal);
+      border: 1px solid #3a3a36;
+      border-left: 3px solid var(--gold);
+      border-radius: 2px;
+      padding: 2rem;
+    }
+    .insc-title {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .insc-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 0.5rem 1.5rem;
+      margin-bottom: 0.65rem;
+      align-items: baseline;
+    }
+    .insc-key {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+    }
+    .insc-val {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.55rem;
+      color: var(--paper);
+      word-break: break-all;
+      line-height: 1.6;
+    }
+    .insc-val a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .insc-val a:hover { text-decoration: underline; }
+    .insc-note {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.52rem;
+      color: var(--mist);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #3a3a36;
+      line-height: 1.8;
+    }
+
+    /* Audio companion */
+    .audio-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      border-top: 1px solid var(--charcoal);
+      text-align: center;
+    }
+    .audio-card {
+      background: var(--charcoal);
+      border: 1px solid #3a3a36;
+      border-radius: 2px;
+      padding: 3rem;
+      max-width: 560px;
+      margin: 2rem auto 0;
+    }
+    .audio-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+    .audio-card h3 {
+      font-size: 1.6rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--paper);
+      margin-bottom: 0.5rem;
+    }
+    .audio-card h3 em { font-style: normal; color: var(--gold); }
+    .audio-card p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--mist);
+      font-style: italic;
+      margin-bottom: 1.75rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--charcoal);
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .fw {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .fl { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .fli {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+    }
+    .fli:hover { color: var(--gold); }
+    .fc {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.55rem;
+      color: var(--mist);
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero, .about { grid-template-columns: 1fr; gap: 3rem; padding: 8rem 1.5rem 3rem; }
+      .about { padding-top: 3rem; }
+      .inscription, .audio-section { padding: 3rem 1.5rem; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://prettybrid.com" class="nw">Prettybrid</a>
+    <div class="nl-wrap">
+      <a href="https://prettybrid.com/gallery.html" class="nl">Collection</a>
+      <a href="https://prettybrid.com/companion-audio" class="nl">Listen</a>
+      <a href="https://prettybrid.com" class="nl nl-btn">Studio</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="lbl">Prettybrid · Beth Parin · 2026</div>
+      <h1>Sovereign <em>Art:</em></h1>
+      <p class="subtitle">A Methodology for Bitcoin Ordinal Inscription</p>
+      <p class="author">By <span>Beth Parin</span> · Prettybrid</p>
+      <p style="font-size:1rem;line-height:1.9;color:#c8c2b4;font-style:italic;margin-bottom:2rem;">A practical guide for artists with no technical background who want to inscribe their work permanently on the Bitcoin blockchain — from a sovereign node they built themselves.</p>
+      <div>
+        <a href="mailto:studio@prettybrid.com" class="btn-primary">✦ &nbsp; Inquire to Purchase</a>
+        <a href="/companion-audio" class="btn-secondary">▶ &nbsp; Listen — Companion Audio</a>
+      </div>
+      <div style="margin-top:1.5rem;">
+        <div style="font-family:'Courier Prime',monospace;font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mist);margin-bottom:0.35rem;">Available Editions</div>
+        <div style="font-family:'Courier Prime',monospace;font-size:0.58rem;color:var(--paper);line-height:1.8;">Print &nbsp;·&nbsp; Ebook &nbsp;·&nbsp; Bitcoin Ordinal Inscription (1 of 1)</div>
+      </div>
+    </div>
+    <div class="hero-cover">
+      <div class="cover-placeholder">
+        <div class="cp-sub">Prettybrid · 2026</div>
+        <div class="cp-line"></div>
+        <div class="cp-title">Sovereign <em>Art:</em></div>
+        <div class="cp-sub">A Methodology for<br>Bitcoin Ordinal Inscription</div>
+        <div class="cp-line"></div>
+        <div class="cp-author">Beth Parin</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="about-text">
+      <div class="section-lbl">About the Book</div>
+      <p>Every digital artwork ever made is stored somewhere. On a server. On a platform. Inside a company's infrastructure. That company can go bankrupt. That server can be turned off.</p>
+      <p>For the first time in the history of digital art, there is a permanent alternative — one anchored to Bitcoin itself.</p>
+      <p>Sovereign Art is the guide Beth Parin wished had existed when she spent the better part of a year learning to run a Bitcoin node in her studio. Written for artists with no technical background, it covers everything from setting up a Bitcoin node to making your first inscription — from a sovereign node you built yourself.</p>
+      <p style="font-family:'Courier Prime',monospace;font-size:0.6rem;letter-spacing:0.15em;color:var(--gold);margin-top:1.5rem;">ISBN: 979-8-9955424-0-7 (print) · 979-8-9955424-1-4 (ebook)</p>
+    </div>
+    <div class="contents-col">
+      <div class="section-lbl">Contents</div>
+      <div class="contents-list">
+        <div class="contents-item"><span class="ci-num">Intro</span><span class="ci-title">Why Sovereignty Matters</span><span class="ci-pg">3</span></div>
+        <div class="contents-item"><span class="ci-num">I</span><span class="ci-title">What Is a Bitcoin Ordinal Inscription?</span><span class="ci-pg">7</span></div>
+        <div class="contents-item"><span class="ci-num">II</span><span class="ci-title">The Four-Stage Practice</span><span class="ci-pg">11</span></div>
+        <div class="contents-item"><span class="ci-num">III</span><span class="ci-title">What You Need</span><span class="ci-pg">15</span></div>
+        <div class="contents-item"><span class="ci-num">IV</span><span class="ci-title">Setting Up Bitcoin Core</span><span class="ci-pg">25</span></div>
+        <div class="contents-item"><span class="ci-num">V</span><span class="ci-title">Installing and Setting Up ord</span><span class="ci-pg">35</span></div>
+        <div class="contents-item"><span class="ci-num">VI</span><span class="ci-title">Preparing Your Image</span><span class="ci-pg">45</span></div>
+        <div class="contents-item"><span class="ci-num">VII</span><span class="ci-title">Making Your First Inscription</span><span class="ci-pg">49</span></div>
+        <div class="contents-item"><span class="ci-num">VIII</span><span class="ci-title">Economics of Sovereign Digital Art</span><span class="ci-pg">63</span></div>
+        <div class="contents-item"><span class="ci-num">IX</span><span class="ci-title">What Permanence Actually Means</span><span class="ci-pg">71</span></div>
+        <div class="contents-item"><span class="ci-num">X</span><span class="ci-title">Next Steps</span><span class="ci-pg">76</span></div>
+        <div class="contents-item"><span class="ci-num">XI</span><span class="ci-title">Troubleshooting &amp; Mistakes</span><span class="ci-pg">81</span></div>
+        <div class="contents-item"><span class="ci-num">—</span><span class="ci-title">Glossary</span><span class="ci-pg">93</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="inscription">
+    <div class="section-lbl">The Inscribed Edition — Permanent Provenance Record</div>
+    <div class="inscription-card">
+      <div class="insc-title">Bitcoin Blockchain Inscription Record</div>
+      <div class="insc-row">
+        <span class="insc-key">Work</span>
+        <span class="insc-val">Sovereign Art: A Methodology for Bitcoin Ordinal Inscription</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Artist</span>
+        <span class="insc-val">Beth Parin / Prettybrid</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Date Inscribed</span>
+        <span class="insc-val">April 13, 2026</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Inscription Number</span>
+        <span class="insc-val">124,313,926</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Inscription ID</span>
+        <span class="insc-val">7f09e1d7dafac1a6f52c360539b5a5c64c55f9674f12477ca3e21895e34d871ai0</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Confirmed by</span>
+        <span class="insc-val">F2Pool — after 14 minutes</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Inscribed from</span>
+        <span class="insc-val">Sovereign ord node — Beth's Mac Pro</span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">View on ordinals.com</span>
+        <span class="insc-val"><a href="https://ordinals.com/inscription/7f09e1d7dafac1a6f52c360539b5a5c64c55f9674f12477ca3e21895e34d871ai0" target="_blank" rel="noopener">ordinals.com/inscription/7f09e1d7...i0 ↗</a></span>
+      </div>
+      <div class="insc-row">
+        <span class="insc-key">Reveal TX</span>
+        <span class="insc-val"><a href="https://mempool.space/tx/7f09e1d7dafac1a6f52c360539b5a5c64c55f9674f12477ca3e21895e34d871a" target="_blank" rel="noopener">mempool.space/tx/7f09e1d7... ↗</a></span>
+      </div>
+      <div class="insc-note">
+        There is one inscribed edition. There will only ever be one. The book teaches sovereign Bitcoin Ordinal inscription. The inscribed edition of the book is itself a sovereign Bitcoin Ordinal inscription, broadcast from the author's own node, validated by the author's own copy of the blockchain, written permanently into the ledger the book describes. The methodology and the artifact are the same object.
+        <br><br>
+        To inquire about acquiring the inscribed edition: <a href="mailto:studio@prettybrid.com" style="color:var(--gold);">studio@prettybrid.com</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="audio-section">
+    <div class="section-lbl" style="max-width:560px;margin:0 auto 0;">Companion Audio</div>
+    <div class="audio-card">
+      <div class="audio-icon">◎</div>
+      <h3>Listen to <em>Sovereign Art</em></h3>
+      <p>A curated companion audio covering the heart of the book — why sovereignty matters, the four-stage practice, the economics of sovereign digital art, and what permanence actually means. Generated using an AI voice as part of a sovereign digital art practice.</p>
+      <a href="/companion-audio" class="btn-primary" style="display:inline-block;">▶ &nbsp; Listen Now</a>
+    </div>
+  </section>
+
+  <footer>
+    <span class="fw">Prettybrid</span>
+    <div class="fl">
+      <a href="https://prettybrid.com/gallery.html" class="fli">Collection</a>
+      <a href="https://prettybrid.com/companion-audio" class="fli">Companion Audio</a>
+      <a href="https://prettybrid.com" class="fli">Studio</a>
+      <span class="fli">studio@prettybrid.com</span>
+    </div>
+    <span class="fc">© 2026 X IJK-12 LLC</span>
+  </footer>
+
+</body>
+</html>

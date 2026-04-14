@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Companion Audio — Sovereign Art by Beth Parin</title>
+  <meta name="description" content="Sovereign Art companion audio supplement — a listening experience covering the heart of the book by Beth Parin / Prettybrid.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://prettybrid.com/companion-audio">
+  <meta property="og:title" content="Sovereign Art — Companion Audio">
+  <meta property="og:description" content="A curated listening experience covering the heart of Sovereign Art by Beth Parin.">
+  <meta property="og:url" content="https://prettybrid.com/companion-audio">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://prettybrid.com/the_desert_speaks_back.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sovereign Art — Companion Audio">
+  <meta name="twitter:image" content="https://prettybrid.com/the_desert_speaks_back.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0d0d0b;
+      --paper: #f5f0e8;
+      --cream: #ede8db;
+      --gold: #b8934a;
+      --rust: #8b3a2a;
+      --charcoal: #2a2a26;
+      --mist: #c8c2b4;
+    }
+    body {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(13,13,11,0.98), rgba(13,13,11,0.7));
+    }
+    .nw {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nl-wrap { display: flex; gap: 2rem; align-items: center; }
+    .nl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+    }
+    .nl:hover { color: var(--gold); }
+    .nl-btn {
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+    }
+    .nl-btn:hover { background: var(--gold); color: var(--ink); }
+
+    /* Hero */
+    .hero {
+      padding: 10rem 3rem 4rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .lbl {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.1;
+      color: var(--paper);
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero-sub {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 2rem;
+    }
+    .hero-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      margin: 2rem auto;
+    }
+
+    /* Note */
+    .note {
+      max-width: 680px;
+      margin: 0 auto 4rem;
+      padding: 0 3rem;
+      text-align: center;
+    }
+    .note p {
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: #c8c2b4;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .note .ai-note {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: var(--mist);
+      line-height: 1.8;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.25rem;
+      text-align: left;
+      margin-top: 2rem;
+    }
+
+    /* Player */
+    .player-wrap {
+      max-width: 680px;
+      margin: 0 auto 5rem;
+      padding: 0 3rem;
+    }
+    .player-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .player-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+    .player-card {
+      background: var(--charcoal);
+      border: 1px solid #3a3a36;
+      border-radius: 2px;
+      padding: 2rem;
+    }
+    .player-title {
+      font-size: 1.6rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--paper);
+      margin-bottom: 0.25rem;
+    }
+    .player-author {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    audio {
+      width: 100%;
+      margin-bottom: 1rem;
+      border-radius: 2px;
+      outline: none;
+      accent-color: var(--gold);
+    }
+    audio::-webkit-media-controls-panel {
+      background: var(--charcoal);
+    }
+    .player-meta {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .player-meta span::before { content: '— '; color: var(--gold); }
+
+    /* Contents */
+    .contents {
+      max-width: 680px;
+      margin: 0 auto 5rem;
+      padding: 0 3rem;
+    }
+    .contents-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .contents-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+    .contents-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .contents-item {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #2a2a26;
+    }
+    .contents-num {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.55rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      min-width: 24px;
+    }
+    .contents-title {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--paper);
+      flex: 1;
+    }
+    .contents-note {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.1em;
+      color: var(--mist);
+    }
+
+    /* Book link */
+    .book-link {
+      max-width: 680px;
+      margin: 0 auto 6rem;
+      padding: 0 3rem;
+      text-align: center;
+    }
+    .book-link p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--mist);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+    .btn-book {
+      display: inline-block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .btn-book:hover { background: var(--gold); color: var(--ink); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--charcoal);
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .fw {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .fl { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .fli {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+    }
+    .fli:hover { color: var(--gold); }
+    .fc {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.55rem;
+      color: var(--mist);
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nl-wrap { gap: 1rem; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .note, .player-wrap, .contents, .book-link { padding: 0 1.5rem; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://prettybrid.com" class="nw">Prettybrid</a>
+    <div class="nl-wrap">
+      <a href="https://prettybrid.com/gallery.html" class="nl">Collection</a>
+      <a href="https://prettybrid.com/sovereign-art" class="nl">The Book</a>
+      <a href="https://prettybrid.com" class="nl nl-btn">Studio</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="lbl">Sovereign Art · Beth Parin</div>
+    <h1>Companion <em>Audio</em></h1>
+    <div class="hero-sub">A Methodology for Bitcoin Ordinal Inscription</div>
+    <div class="hero-line"></div>
+  </section>
+
+  <section class="note">
+    <p>This is a companion audio supplement to <em>Sovereign Art: A Methodology for Bitcoin Ordinal Inscription</em> by Beth Parin. It is designed to be used alongside the print or ebook edition of the book — not as a replacement for it.</p>
+    <p>What you will hear is the heart of the book: why sovereignty matters for artists, what this practice looks like from the inside, the economics of sovereign digital art, and what permanence actually means.</p>
+    <div class="ai-note">
+      This companion audio was generated using an AI voice as part of a sovereign digital art practice. The written words are entirely Beth Parin's own. The AI provides a voice — a way to bring this work to you in a form you can listen to while driving, walking, or simply sitting with your thoughts. The AI did not write these words. It speaks them. The distinction is everything.
+    </div>
+  </section>
+
+  <section class="player-wrap">
+    <div class="player-label">Listen</div>
+    <div class="player-card">
+      <div class="player-title">Sovereign Art</div>
+      <div class="player-author">Beth Parin · Prettybrid · 2026</div>
+      <audio controls preload="metadata">
+        <source src="/sovereign-art-companion-audio.m4a" type="audio/mp4">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="player-meta">
+        <span>Companion Audio</span>
+        <span>AI Narration</span>
+        <span>2026</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="contents">
+    <div class="contents-label">What You Will Hear</div>
+    <div class="contents-list">
+      <div class="contents-item">
+        <span class="contents-num">I</span>
+        <span class="contents-title">Preface</span>
+        <span class="contents-note">Beth's voice</span>
+      </div>
+      <div class="contents-item">
+        <span class="contents-num">II</span>
+        <span class="contents-title">Why Sovereignty Matters</span>
+        <span class="contents-note">Introduction</span>
+      </div>
+      <div class="contents-item">
+        <span class="contents-num">III</span>
+        <span class="contents-title">The Four-Stage Practice</span>
+        <span class="contents-note">The methodology</span>
+      </div>
+      <div class="contents-item">
+        <span class="contents-num">IV</span>
+        <span class="contents-title">The Economics of Sovereign Digital Art</span>
+        <span class="contents-note">Chapter Eight</span>
+      </div>
+      <div class="contents-item">
+        <span class="contents-num">V</span>
+        <span class="contents-title">What Permanence Actually Means</span>
+        <span class="contents-note">Chapter Nine</span>
+      </div>
+      <div class="contents-item">
+        <span class="contents-num">VI</span>
+        <span class="contents-title">A Final Word</span>
+        <span class="contents-note">Closing</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="book-link">
+    <p>The technical chapters — step-by-step instructions, Terminal commands, and the complete sovereign infrastructure guide — are in the full book edition.</p>
+    <a href="https://prettybrid.com/sovereign-art" class="btn-book">✦ &nbsp; Get the Book</a>
+  </section>
+
+  <footer>
+    <span class="fw">Prettybrid</span>
+    <div class="fl">
+      <a href="https://prettybrid.com/gallery.html" class="fli">Collection</a>
+      <a href="https://prettybrid.com/sovereign-art" class="fli">The Book</a>
+      <a href="https://prettybrid.com" class="fli">Studio</a>
+      <span class="fli">studio@prettybrid.com</span>
+    </div>
+    <span class="fc">© 2026 X IJK-12 LLC</span>
+  </footer>
+
+</body>
+</html>
